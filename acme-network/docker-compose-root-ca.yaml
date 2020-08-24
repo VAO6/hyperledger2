@@ -1,0 +1,65 @@
+# Copyright Bram Dufour. All Rights Reserved.
+# Autor: Bram Dufour, bram.dufour8@gmail.com
+# Date: 23-08-2020
+# SPDX-License-Identifier: Apache-2.0
+#
+version: "2"
+
+networks:
+  basic:
+services:
+  root.ca.org1.acme.org:
+    image: hyperledger/fabric-ca:$FABRIC_CA_IMAGE_TAG
+    container_name: root.ca.org1.acme.org
+    ports:
+      - "7054:7054"
+      - "7055:7055"
+    volumes:
+      - ./fabric-ca/org1.acme.org/root:/etc/hyperledger/fabric-ca-server/root
+      - ./fabric-ca/org1.acme.org/tls-root:/etc/hyperledger/fabric-ca-server/root-tls
+    command: >
+      sh -c "fabric-ca-server start -b admin:adminpw --cafiles /etc/hyperledger/fabric-ca-server/root/fabric-ca-server-config.yaml --cafiles /etc/hyperledger/fabric-ca-server/root-tls/fabric-ca-server-config.yaml"
+    networks:
+      - basic
+
+  root.ca.org2.acme.org:
+    image: hyperledger/fabric-ca:$FABRIC_CA_IMAGE_TAG
+    container_name: root.ca.org2.acme.org
+    ports:
+      - "8054:7054"
+      - "8055:7055"
+    volumes:
+      - ./fabric-ca/org2.acme.org/root:/etc/hyperledger/fabric-ca-server/root
+      - ./fabric-ca/org2.acme.org/tls-root:/etc/hyperledger/fabric-ca-server/root-tls
+    command: >
+      sh -c "fabric-ca-server start -b admin:adminpw --cafiles /etc/hyperledger/fabric-ca-server/root/fabric-ca-server-config.yaml --cafiles /etc/hyperledger/fabric-ca-server/root-tls/fabric-ca-server-config.yaml"
+    networks:
+      - basic
+
+  root.ca.org3.acme.org:
+    image: hyperledger/fabric-ca:$FABRIC_CA_IMAGE_TAG
+    container_name: root.ca.org3.acme.org
+    ports:
+      - "9054:7054"
+      - "9055:7055"
+    volumes:
+      - ./fabric-ca/org3.acme.org/root:/etc/hyperledger/fabric-ca-server/root
+      - ./fabric-ca/org3.acme.org/tls-root:/etc/hyperledger/fabric-ca-server/root-tls
+    command: >
+      sh -c "fabric-ca-server start -b admin:adminpw --cafiles /etc/hyperledger/fabric-ca-server/root/fabric-ca-server-config.yaml --cafiles /etc/hyperledger/fabric-ca-server/root-tls/fabric-ca-server-config.yaml"
+    networks:
+      - basic
+
+  root.ca.acme.org:
+    image: hyperledger/fabric-ca:$FABRIC_CA_IMAGE_TAG
+    container_name: root.ca.acme.org
+    ports:
+      - "10054:7054"
+      - "10055:7055"
+    volumes:
+      - ./fabric-ca/acme.org/root:/etc/hyperledger/fabric-ca-server/root
+      - ./fabric-ca/acme.org/tls-root:/etc/hyperledger/fabric-ca-server/root-tls
+    command: >
+      sh -c "fabric-ca-server start -b admin:adminpw --cafiles /etc/hyperledger/fabric-ca-server/root/fabric-ca-server-config.yaml --cafiles /etc/hyperledger/fabric-ca-server/root-tls/fabric-ca-server-config.yaml"
+    networks:
+      - basic
