@@ -8,58 +8,95 @@ version: "2"
 networks:
   basic:
 services:
+  # org1
   root.ca.org1.acme.org:
     image: hyperledger/fabric-ca:$FABRIC_CA_IMAGE_TAG
     container_name: root.ca.org1.acme.org
     ports:
       - "7054:7054"
-      - "7055:7055"
     volumes:
-      - ./fabric-ca/org1.acme.org/root:/etc/hyperledger/fabric-ca-server/root
-      - ./fabric-ca/org1.acme.org/tls-root:/etc/hyperledger/fabric-ca-server/root-tls
+      - ./fabric-ca/org1.acme.org/root:/etc/hyperledger/fabric-ca-server
     command: >
-      sh -c "fabric-ca-server start -b admin:adminpw --cafiles /etc/hyperledger/fabric-ca-server/root/fabric-ca-server-config.yaml --cafiles /etc/hyperledger/fabric-ca-server/root-tls/fabric-ca-server-config.yaml"
+      sh -c "fabric-ca-server start -b admin:adminpw"
     networks:
       - basic
-
+  tls.root.ca.org1.acme.org:
+    image: hyperledger/fabric-ca:$FABRIC_CA_IMAGE_TAG
+    container_name: tls.root.ca.org1.acme.org
+    ports:
+      - "7055:7054"
+    volumes:
+      - ./fabric-ca/org1.acme.org/tls-root:/etc/hyperledger/fabric-ca-server
+    command: >
+      sh -c "fabric-ca-server start -b admin:adminpw"
+    networks:
+      - basic
+  # org2
   root.ca.org2.acme.org:
     image: hyperledger/fabric-ca:$FABRIC_CA_IMAGE_TAG
     container_name: root.ca.org2.acme.org
     ports:
       - "8054:7054"
-      - "8055:7055"
     volumes:
-      - ./fabric-ca/org2.acme.org/root:/etc/hyperledger/fabric-ca-server/root
-      - ./fabric-ca/org2.acme.org/tls-root:/etc/hyperledger/fabric-ca-server/root-tls
+      - ./fabric-ca/org2.acme.org/root:/etc/hyperledger/fabric-ca-server
     command: >
-      sh -c "fabric-ca-server start -b admin:adminpw --cafiles /etc/hyperledger/fabric-ca-server/root/fabric-ca-server-config.yaml --cafiles /etc/hyperledger/fabric-ca-server/root-tls/fabric-ca-server-config.yaml"
+      sh -c "fabric-ca-server start -b admin:adminpw"
     networks:
       - basic
-
+  tls.root.ca.org2.acme.org:
+    image: hyperledger/fabric-ca:$FABRIC_CA_IMAGE_TAG
+    container_name: tls.root.ca.org2.acme.org
+    ports:
+      - "8055:7054"
+    volumes:
+      - ./fabric-ca/org2.acme.org/tls-root:/etc/hyperledger/fabric-ca-server
+    command: >
+      sh -c "fabric-ca-server start -b admin:adminpw"
+    networks:
+      - basic
+  # org3
   root.ca.org3.acme.org:
     image: hyperledger/fabric-ca:$FABRIC_CA_IMAGE_TAG
     container_name: root.ca.org3.acme.org
     ports:
       - "9054:7054"
-      - "9055:7055"
     volumes:
-      - ./fabric-ca/org3.acme.org/root:/etc/hyperledger/fabric-ca-server/root
-      - ./fabric-ca/org3.acme.org/tls-root:/etc/hyperledger/fabric-ca-server/root-tls
+      - ./fabric-ca/org3.acme.org/root:/etc/hyperledger/fabric-ca-server
     command: >
-      sh -c "fabric-ca-server start -b admin:adminpw --cafiles /etc/hyperledger/fabric-ca-server/root/fabric-ca-server-config.yaml --cafiles /etc/hyperledger/fabric-ca-server/root-tls/fabric-ca-server-config.yaml"
+      sh -c "fabric-ca-server start -b admin:adminpw"
     networks:
       - basic
-
+  tls.root.ca.org3.acme.org:
+    image: hyperledger/fabric-ca:$FABRIC_CA_IMAGE_TAG
+    container_name: tls.root.ca.org3.acme.org
+    ports:
+      - "9055:7054"
+    volumes:
+      - ./fabric-ca/org3.acme.org/tls-root:/etc/hyperledger/fabric-ca-server
+    command: >
+      sh -c "fabric-ca-server start -b admin:adminpw"
+    networks:
+      - basic
+  # acme
   root.ca.acme.org:
     image: hyperledger/fabric-ca:$FABRIC_CA_IMAGE_TAG
     container_name: root.ca.acme.org
     ports:
       - "10054:7054"
-      - "10055:7055"
     volumes:
-      - ./fabric-ca/acme.org/root:/etc/hyperledger/fabric-ca-server/root
-      - ./fabric-ca/acme.org/tls-root:/etc/hyperledger/fabric-ca-server/root-tls
+      - ./fabric-ca/acme.org/root:/etc/hyperledger/fabric-ca-server
     command: >
-      sh -c "fabric-ca-server start -b admin:adminpw --cafiles /etc/hyperledger/fabric-ca-server/root/fabric-ca-server-config.yaml --cafiles /etc/hyperledger/fabric-ca-server/root-tls/fabric-ca-server-config.yaml"
+      sh -c "fabric-ca-server start -b admin:adminpw"
+    networks:
+      - basic
+  tls.root.ca.acme.org:
+    image: hyperledger/fabric-ca:$FABRIC_CA_IMAGE_TAG
+    container_name: tls.root.ca.acme.org
+    ports:
+      - "10055:7054"
+    volumes:
+      - ./fabric-ca/acme.org/tls-root:/etc/hyperledger/fabric-ca-server
+    command: >
+      sh -c "fabric-ca-server start -b admin:adminpw"
     networks:
       - basic

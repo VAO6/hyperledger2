@@ -40,7 +40,7 @@
 version: 1.4.8
 
 # Server's listening port (default: 7054)
-port: 7055
+port: 7054
 
 # Cross-Origin Resource Sharing (CORS)
 cors:
@@ -309,10 +309,10 @@ csr:
     algo: ecdsa
     size: 256
   names:
-    - C: MX
-      ST: "Mexico City"
-      L: "Mexico City"
-      O: Org3
+    - C: BE
+      ST: "Flemish Brabant"
+      L: Louvain
+      O: Acme
       OU: "Hyperledger Fabric"
   hosts:
     - tls.root.ca.org3.acme.org

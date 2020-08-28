@@ -78,14 +78,15 @@ tls:
 #  The CA section contains information related to the Certificate Authority
 #  including the name of the CA, which should be unique for all members
 #  of a blockchain network.  It also includes the key and certificate files
-#  used when issuing enrollment certificates (ECerts).
+#  used when issuing enrollment certificates (ECerts) and transaction
+#  certificates (TCerts).
 #  The chainfile (if it exists) contains the certificate chain which
 #  should be trusted for this CA, where the 1st in the chain is always the
 #  root CA certificate.
 #############################################################################
 ca:
   # Name of this CA
-  name: tls.root.ca.org2.acme.org
+  name: tls.int.ca.org3.acme.org
   # Key file (is only used to import a private key into BCCSP)
   keyfile:
   # Certificate file (default: ca-cert.pem)
@@ -108,7 +109,9 @@ crl:
 #  The registry section controls how the fabric-ca-server does two things:
 #  1) authenticates enrollment requests which contain a username and password
 #     (also known as an enrollment ID and secret).
-#  2) once authenticated, retrieves the identity's attribute names and values.
+#  2) once authenticated, retrieves the identity's attribute names and
+#     values which the fabric-ca-server optionally puts into TCerts
+#     which it issues for transacting on the Hyperledger Fabric blockchain.
 #     These attributes are useful for making access control decisions in
 #     chaincode.
 #  There are two main configuration options:
@@ -276,14 +279,14 @@ signing:
       caconstraint:
         isca: true
         maxpathlen: 0
-    tls:
-      usage:
-        - signing
-        - key encipherments
-        - server auth
-        - client auth
-        - key agreement
-      expiry: 8760h
+    #tls:
+    #  usage:
+    #    - signing
+    #    - key encipherment
+    #    - server auth
+    #    - client auth
+    #    - key agreement
+    #  expiry: 8760h
 
 ###########################################################################
 #  Certificate Signing Request (CSR) section.
@@ -304,22 +307,22 @@ signing:
 #     CA certificates though it can still issue end entity certificates.
 ###########################################################################
 csr:
-  cn: tls.root.ca.org2.acme.org
+  cn: tls.int.ca.org3.acme.org
   keyrequest:
     algo: ecdsa
     size: 256
   names:
-    - C: CL
-      ST: Santiago
-      L: Santiago
-      O: Org2
+    - C: MX
+      ST: "Mexico City"
+      L: "Mexico City"
+      O: Org3
       OU: "Hyperledger Fabric"
   hosts:
-    - tls.root.ca.org2.acme.org
+    - tls.int.ca.org3.acme.org
     - localhost
   ca:
     expiry: 131400h
-    pathlength: 1
+    pathlength: 0
 
 ###########################################################################
 # Each CA can issue both X509 enrollment certificate as well as Idemix

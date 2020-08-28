@@ -1,0 +1,105 @@
+# Copyright Bram Dufour. All Rights Reserved.
+# Autor: Bram Dufour, bram.dufour8@gmail.com
+# Date: 23-08-2020
+# SPDX-License-Identifier: Apache-2.0
+#
+version: "2"
+
+networks:
+  basic:
+services:
+  int.ca.org1.acme.org:
+    image: hyperledger/fabric-ca:$FABRIC_CA_IMAGE_TAG
+    container_name: int.ca.org1.acme.org
+    ports:
+      - "7056:7054"
+    volumes:
+      - ./fabric-ca/org1.acme.org/int:/etc/hyperledger/fabric-ca-server
+    command: >
+      sh -c "fabric-ca-server start -b admin:adminpw -u http://int.ca.org1.acme.org:password@root.ca.org1.acme.org:7054"
+    networks:
+      - basic
+
+  tls.int.ca.org1.acme.org:
+    image: hyperledger/fabric-ca:$FABRIC_CA_IMAGE_TAG
+    container_name: tls.int.ca.org1.acme.org
+    ports:
+      - "7057:7054"
+    volumes:
+      - ./fabric-ca/org1.acme.org/tls-int:/etc/hyperledger/fabric-ca-server
+    command: >
+      sh -c "fabric-ca-server start -b admin:adminpw -u http://tls.int.ca.org1.acme.org:password@tls.root.ca.org1.acme.org:7054"
+    networks:
+      - basic
+
+  int.ca.org2.acme.org:
+    image: hyperledger/fabric-ca:$FABRIC_CA_IMAGE_TAG
+    container_name: int.ca.org2.acme.org
+    ports:
+      - "8056:7054"
+    volumes:
+      - ./fabric-ca/org2.acme.org/int:/etc/hyperledger/fabric-ca-server
+    command: >
+      sh -c "fabric-ca-server start -b admin:adminpw -u http://int.ca.org2.acme.org:password@root.ca.org2.acme.org:7054"
+    networks:
+      - basic
+
+  tls.int.ca.org2.acme.org:
+    image: hyperledger/fabric-ca:$FABRIC_CA_IMAGE_TAG
+    container_name: tls.int.ca.org2.acme.org
+    ports:
+      - "8057:7054"
+    volumes:
+      - ./fabric-ca/org2.acme.org/tls-int:/etc/hyperledger/fabric-ca-server
+    command: >
+      sh -c "fabric-ca-server start -b admin:adminpw -u http://tls.int.ca.org2.acme.org:password@tls.root.ca.org2.acme.org:7054"
+    networks:
+      - basic
+
+  int.ca.org3.acme.org:
+    image: hyperledger/fabric-ca:$FABRIC_CA_IMAGE_TAG
+    container_name: int.ca.org3.acme.org
+    ports:
+      - "9056:7054"
+    volumes:
+      - ./fabric-ca/org3.acme.org/int:/etc/hyperledger/fabric-ca-server
+    command: >
+      sh -c "fabric-ca-server start -b admin:adminpw -u http://int.ca.org3.acme.org:password@root.ca.org3.acme.org:7054"
+    networks:
+      - basic
+
+  tls.int.ca.org3.acme.org:
+    image: hyperledger/fabric-ca:$FABRIC_CA_IMAGE_TAG
+    container_name: tls.int.ca.org3.acme.org
+    ports:
+      - "9057:7054"
+    volumes:
+      - ./fabric-ca/org3.acme.org/tls-int:/etc/hyperledger/fabric-ca-server
+    command: >
+      sh -c "fabric-ca-server start -b admin:adminpw -u http://tls.int.ca.org3.acme.org:password@tls.root.ca.org3.acme.org:7054"
+    networks:
+      - basic
+
+  int.ca.acme.org:
+    image: hyperledger/fabric-ca:$FABRIC_CA_IMAGE_TAG
+    container_name: int.ca.acme.org
+    ports:
+      - "10056:7054"
+    volumes:
+      - ./fabric-ca/acme.org/int:/etc/hyperledger/fabric-ca-server
+    command: >
+      sh -c "fabric-ca-server start -b admin:adminpw -u http://int.ca.acme.org:password@root.ca.acme.org:7054"
+    networks:
+      - basic
+
+  tls.int.ca.acme.org:
+    image: hyperledger/fabric-ca:$FABRIC_CA_IMAGE_TAG
+    container_name: tls.int.ca.acme.org
+    ports:
+      - "10057:7054"
+    volumes:
+      - ./fabric-ca/acme.org/tls-int:/etc/hyperledger/fabric-ca-server
+    command: >
+      sh -c "fabric-ca-server start -b admin:adminpw -u http://tls.int.ca.acme.org:password@tls.root.ca.acme.org:7054"
+    networks:
+      - basic
