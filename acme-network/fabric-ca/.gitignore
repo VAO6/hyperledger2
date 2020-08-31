@@ -1,4 +1,10 @@
-msp/
+cacerts/
+intermediatecerts/
+tlscacerts/
+tlsintermediatecerts/
+signcerts/
+keystore/
+user/
 *.pem
 *.db
 IssuerPublicKey
