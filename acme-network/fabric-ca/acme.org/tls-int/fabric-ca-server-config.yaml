@@ -131,7 +131,7 @@ registry:
   identities:
     - name: admin
       pass: adminpw
-      type: client
+      type:
       affiliation: ""
       attrs:
         hf.Registrar.Roles: "*"
@@ -279,14 +279,14 @@ signing:
       caconstraint:
         isca: true
         maxpathlen: 0
-    #tls:
-    #  usage:
-    #    - signing
-    #    - key encipherment
-    #    - server auth
-    #    - client auth
-    #    - key agreement
-    #  expiry: 8760h
+    tls:
+      usage:
+        - signing
+        - key encipherment
+        - server auth
+        - client auth
+        - key agreement
+      expiry: 8760h
 
 ###########################################################################
 #  Certificate Signing Request (CSR) section.
@@ -307,7 +307,7 @@ signing:
 #     CA certificates though it can still issue end entity certificates.
 ###########################################################################
 csr:
-  cn: tls.int.ca.acme.org
+  cn:
   keyrequest:
     algo: ecdsa
     size: 256

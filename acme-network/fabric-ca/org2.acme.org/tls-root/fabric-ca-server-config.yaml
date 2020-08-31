@@ -128,7 +128,7 @@ registry:
   identities:
     - name: admin
       pass: adminpw
-      type: client
+      type:
       affiliation: ""
       attrs:
         hf.Registrar.Roles: "*"

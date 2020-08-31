@@ -3,3 +3,4 @@ msp/
 *.db
 IssuerPublicKey
 IssuerRevocationPublicKey
+clients/

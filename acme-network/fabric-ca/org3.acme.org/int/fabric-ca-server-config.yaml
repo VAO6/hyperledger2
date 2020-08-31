@@ -131,7 +131,7 @@ registry:
   identities:
     - name: admin
       pass: adminpw
-      type: client
+      type:
       affiliation: ""
       attrs:
         hf.Registrar.Roles: "*"
@@ -307,7 +307,7 @@ signing:
 #     CA certificates though it can still issue end entity certificates.
 ###########################################################################
 csr:
-  cn: int.ca.org3.acme.org
+  cn:
   keyrequest:
     algo: ecdsa
     size: 256
