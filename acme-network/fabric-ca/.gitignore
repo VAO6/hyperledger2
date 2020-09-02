@@ -5,8 +5,10 @@ tlsintermediatecerts/
 signcerts/
 keystore/
 user/
+clients/
+tls/
 *.pem
 *.db
 IssuerPublicKey
 IssuerRevocationPublicKey
-clients/
+
