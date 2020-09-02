@@ -30,43 +30,43 @@ function cleanNode() {
     node=$2
     type=$3
 
-    NODE_MSP_PATH=../fabric-ca/$org/peers/$node/msp
-    if test "$type" = "orderer"
-    then
-        NODE_MSP_PATH=../fabric-ca/$org/orderers/$node/msp
-    fi
-    NODE_TLS_PATH=../fabric-ca/$org/peers/$node/tls
-    if test "$type" = "orderer"
-    then
-        NODE_TLS_PATH=../fabric-ca/$org/orderers/$node/tls
-    fi
+    NODE_MSP_PATH=../fabric-ca/$org/${type}s/$node/msp
+    #if test "$type" = "orderer"
+    #then
+    #    NODE_MSP_PATH=../fabric-ca/$org/orderers/$node/msp
+    #fi
+    NODE_TLS_PATH=../fabric-ca/$org/${type}s/$node/tls
+    #if test "$type" = "orderer"
+    #then
+    #    NODE_TLS_PATH=../fabric-ca/$org/orderers/$node/tls
+    #fi
     sudo rm -r $NODE_MSP_PATH
     sudo rm -r $NODE_TLS_PATH
 }
 
-cleanCA acme.org root
-cleanCA acme.org int
-cleanCA acme.org tls-root
-cleanCA acme.org tls-int
-cleanCA org1.acme.org root
-cleanCA org1.acme.org int
-cleanCA org1.acme.org tls-root
-cleanCA org1.acme.org tls-int
-cleanCA org2.acme.org root
-cleanCA org2.acme.org int
-cleanCA org2.acme.org tls-root
-cleanCA org2.acme.org tls-int
-cleanCA org3.acme.org root
-cleanCA org3.acme.org int
-cleanCA org3.acme.org tls-root
-cleanCA org3.acme.org tls-int
+cleanCA acme.com root
+cleanCA acme.com int
+cleanCA acme.com tls-root
+cleanCA acme.com tls-int
+cleanCA org1.acme.com root
+cleanCA org1.acme.com int
+cleanCA org1.acme.com tls-root
+cleanCA org1.acme.com tls-int
+cleanCA org2.acme.com root
+cleanCA org2.acme.com int
+cleanCA org2.acme.com tls-root
+cleanCA org2.acme.com tls-int
+cleanCA org3.acme.com root
+cleanCA org3.acme.com int
+cleanCA org3.acme.com tls-root
+cleanCA org3.acme.com tls-int
 
-cleanOrgMSP org1.acme.org
-cleanOrgMSP org2.acme.org
-cleanOrgMSP org3.acme.org
-cleanOrgMSP acme.org
+cleanOrgMSP org1.acme.com
+cleanOrgMSP org2.acme.com
+cleanOrgMSP org3.acme.com
+cleanOrgMSP acme.com
 
-cleanNode org1.acme.org peer0.org1.acme.org peer
-cleanNode org2.acme.org peer0.org2.acme.org peer
-cleanNode org3.acme.org peer0.org3.acme.org peer
-cleanNode acme.org orderer.acme.org orderer
+cleanNode org1.acme.com peer0.org1.acme.com peer
+cleanNode org2.acme.com peer0.org2.acme.com peer
+cleanNode org3.acme.com peer0.org3.acme.com peer
+cleanNode acme.com orderer.acme.com orderer
