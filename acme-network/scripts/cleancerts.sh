@@ -3,15 +3,15 @@ function cleanCA(){
     ca=$2
 
     CA_PATH=../fabric-ca/$org/$ca
-    rm -r $CA_PATH/clients
-    rm -r $CA_PATH/msp
-    rm $CA_PATH/ca-cert.pem
-    rm $CA_PATH/fabric-ca-server.db
-    rm $CA_PATH/IssuerPublicKey
-    rm $CA_PATH/IssuerRevocationPublicKey
+    sudo rm -r $CA_PATH/clients
+    sudo rm -r $CA_PATH/msp
+    sudo rm $CA_PATH/ca-cert.pem
+    sudo rm $CA_PATH/fabric-ca-server.db
+    sudo rm $CA_PATH/IssuerPublicKey
+    sudo rm $CA_PATH/IssuerRevocationPublicKey
     CA_CHAIN_FILE=$CA_PATH/ca-chain.pem
     if test -f "$CA_CHAIN_FILE"; then
-        rm $CA_CHAIN_FILE
+        sudo rm $CA_CHAIN_FILE
     fi
 }
 
@@ -19,10 +19,10 @@ function cleanOrgMSP() {
     org=$1
 
     MSP_PATH=../fabric-ca/$org/msp
-    rm -r $MSP_PATH/cacerts
-    rm -r $MSP_PATH/intermediatecerts
-    rm -r $MSP_PATH/tlscacerts
-    rm -r $MSP_PATH/tlsintermediatecerts
+    sudo rm -r $MSP_PATH/cacerts
+    sudo rm -r $MSP_PATH/intermediatecerts
+    sudo rm -r $MSP_PATH/tlscacerts
+    sudo rm -r $MSP_PATH/tlsintermediatecerts
 }
 
 function cleanLocalMSP() {
@@ -33,8 +33,8 @@ function cleanLocalMSP() {
     LOCAL_MSP_PATH=../fabric-ca/$org/${type}s/$name/msp
     TLS_FOLDER_PATH=../fabric-ca/$org/${type}s/$name/tls
 
-    rm -r $LOCAL_MSP_PATH
-    rm -r $TLS_FOLDER_PATH
+    sudo rm -r $LOCAL_MSP_PATH
+    sudo rm -r $TLS_FOLDER_PATH
 }
 
 cleanCA acme.com root
