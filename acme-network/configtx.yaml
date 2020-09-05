@@ -12,7 +12,7 @@ Organizations:
     - &OrdererOrg
         Name: OrdererOrg
         ID: OrdererMSP
-        MSPDir: crypto-config/ordererOrganizations/acme.com/msp
+        MSPDir: fabric-ca/acme.com/msp
         Policies:
             Readers:
                 Type: Signature
@@ -29,7 +29,7 @@ Organizations:
     - &Org1
         Name: Org1MSP
         ID: Org1MSP
-        MSPDir: crypto-config/peerOrganizations/org1.acme.com/msp
+        MSPDir: fabric-ca/org1.acme.com/msp
         Policies:
             Readers:
                 Type: Signature
@@ -50,7 +50,7 @@ Organizations:
     - &Org2
         Name: Org2MSP
         ID: Org2MSP
-        MSPDir: crypto-config/peerOrganizations/org2.acme.com/msp
+        MSPDir: fabric-ca/org2.acme.com/msp
         Policies:
             Readers:
                 Type: Signature
@@ -71,7 +71,7 @@ Organizations:
     - &Org3
         Name: Org3MSP
         ID: Org3MSP
-        MSPDir: crypto-config/peerOrganizations/org3.acme.com/msp
+        MSPDir: fabric-ca/org3.acme.com/msp
         Policies:
             Readers:
                 Type: Signature
@@ -99,7 +99,7 @@ Capabilities:
         V2_0: true
 
     Application: &ApplicationCapabilities
-        V2_0: true        
+        V2_0: true
 
 ################################################################################
 #   SECTION: Application
@@ -131,35 +131,30 @@ Application: &ApplicationDefaults
             Rule: "MAJORITY Endorsement"
 
     Capabilities:
-        <<: *ApplicationCapabilities    
+        <<: *ApplicationCapabilities
 
 ################################################################################
 #   SECTION: Orderer
 ################################################################################
 Orderer: &OrdererDefaults
-    # Orderer Type: The orderer implementation to start
-    OrdererType: solo
-
-#    OrdererType: etcdraft
+    # Orderer Type: The orderer consensus algorithm
+    OrdererType: etcdraft
 
     EtcdRaft:
         Consenters:
         - Host: orderer.acme.com
           Port: 7050
-          ClientTLSCert: ../organizations/ordererOrganizations/acme.com/orderers/orderer.acme.com/tls/server.crt
-          ServerTLSCert: ../organizations/ordererOrganizations/acme.com/orderers/orderer.acme.com/tls/server.crt
+          ClientTLSCert: fabric-ca/acme.com/orderers/orderer.acme.com/tls/server.crt
+          ServerTLSCert: fabric-ca/acme.com/orderers/orderer.acme.com/tls/server.crt
 
     Addresses:
         - orderer.acme.com:7050
     BatchTimeout: 2s
     BatchSize:
-        MaxMessageCount: 10
-        AbsoluteMaxBytes: 99 MB
-        PreferredMaxBytes: 512 KB
+        MaxMessageCount: 500
+        AbsoluteMaxBytes: 10 MB
+        PreferredMaxBytes: 2 MB
 
-    Kafka:
-        Brokers:
-            - 127.0.0.1:9092
     Organizations:
 
     Policies:

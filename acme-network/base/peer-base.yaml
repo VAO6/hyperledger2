@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-version: '2'
+version: "2"
 
 services:
   peer-base:
@@ -17,7 +17,7 @@ services:
       # ---CHANGED---
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=acme-network_basic
       - FABRIC_LOGGING_SPEC=INFO
-     # - FABRIC_LOGGING_SPEC=DEBUG
+      # - FABRIC_LOGGING_SPEC=DEBUG
       - CORE_PEER_TLS_ENABLED=true
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
       - CORE_PEER_GOSSIP_ORGLEADER=false
