@@ -6,3 +6,7 @@ sleep 5
 cd scripts && ./intca.sh
 ./identities.sh
 ./msp.sh
+./artifacts.sh
+cd .. && docker-compose -f docker-compose-cli-couchdb.yaml up -d
+sleep 5
+cd scripts && ./channels.sh

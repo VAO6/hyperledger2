@@ -3,47 +3,41 @@ function createChannelMSP() {
 
     MSP_PATH=../fabric-ca/$org/msp
     mkdir -p $MSP_PATH
-    mkdir $MSP_PATH/cacerts && sudo cp ../fabric-ca/$org/root/ca-cert.pem $MSP_PATH/cacerts/ca-cert.pem
-    mkdir $MSP_PATH/intermediatecerts && sudo cp ../fabric-ca/$org/int/ca-cert.pem $MSP_PATH/intermediatecerts/ca-cert.pem
-    mkdir $MSP_PATH/tlscacerts && sudo cp ../fabric-ca/$org/tls-root/ca-cert.pem $MSP_PATH/tlscacerts/ca-cert.pem
-    mkdir $MSP_PATH/tlsintermediatecerts && sudo cp ../fabric-ca/$org/tls-int/ca-cert.pem $MSP_PATH/tlsintermediatecerts/ca-cert.pem
+    mkdir $MSP_PATH/cacerts && cp ../fabric-ca/$org/root/ca-cert.pem $MSP_PATH/cacerts/ca-cert.pem
+    mkdir $MSP_PATH/intermediatecerts && cp ../fabric-ca/$org/int/ca-cert.pem $MSP_PATH/intermediatecerts/ca-cert.pem
+    mkdir $MSP_PATH/tlscacerts && cp ../fabric-ca/$org/tls-root/ca-cert.pem $MSP_PATH/tlscacerts/ca-cert.pem
+    mkdir $MSP_PATH/tlsintermediatecerts && cp ../fabric-ca/$org/tls-int/ca-cert.pem $MSP_PATH/tlsintermediatecerts/ca-cert.pem
 }
 
 function createLocalMSP() {
     org=$1
-    node=$2
+    name=$2
     type=$3
 
-    NODE_MSP_PATH=../fabric-ca/$org/${type}s/$node/msp
-    #if test "$type" = "orderer"
-    #then
-    #    NODE_MSP_PATH=../fabric-ca/$org/orderers/$node/msp
-    #fi
-    mkdir -p $NODE_MSP_PATH
-    sudo cp ../fabric-ca/$org/msp/config.yaml $NODE_MSP_PATH
-    mkdir $NODE_MSP_PATH/cacerts && sudo cp -r ../fabric-ca/$org/int/clients/$node/msp/cacerts/ $NODE_MSP_PATH/cacerts/
-    mkdir $NODE_MSP_PATH/intermediatecerts && sudo cp -r ../fabric-ca/$org/int/clients/$node/msp/intermediatecerts/ $NODE_MSP_PATH/intermediatecerts/
-    mkdir $NODE_MSP_PATH/tlscacerts && sudo cp -r ../fabric-ca/$org/tls-int/clients/$node/msp/cacerts/ $NODE_MSP_PATH/tlscacerts/
-    mkdir $NODE_MSP_PATH/tlsintermediatecerts && sudo cp -r ../fabric-ca/$org/tls-int/clients/$node/msp/intermediatecerts/ $NODE_MSP_PATH/tlsintermediatecerts/
-    mkdir $NODE_MSP_PATH/signcerts && sudo cp -r ../fabric-ca/$org/int/clients/$node/msp/signcerts/ $NODE_MSP_PATH/signcerts/
-    mkdir $NODE_MSP_PATH/keystore && sudo cp -r ../fabric-ca/$org/int/clients/$node/msp/keystore/ $NODE_MSP_PATH/keystore/
+    LOCAL_MSP_PATH=../fabric-ca/$org/${type}s/$name/msp
+
+    mkdir -p $LOCAL_MSP_PATH
+    cp ../fabric-ca/$org/msp/config.yaml $LOCAL_MSP_PATH
+    mkdir $LOCAL_MSP_PATH/cacerts && cp ../fabric-ca/$org/root/ca-cert.pem $LOCAL_MSP_PATH/cacerts/ca-cert.pem
+    mkdir $LOCAL_MSP_PATH/intermediatecerts && cp ../fabric-ca/$org/int/ca-cert.pem $LOCAL_MSP_PATH/intermediatecerts/ca-cert.pem
+    mkdir $LOCAL_MSP_PATH/tlscacerts && cp ../fabric-ca/$org/tls-root/ca-cert.pem $LOCAL_MSP_PATH/tlscacerts/ca-cert.pem
+    mkdir $LOCAL_MSP_PATH/tlsintermediatecerts && cp ../fabric-ca/$org/tls-int/ca-cert.pem $LOCAL_MSP_PATH/tlsintermediatecerts/ca-cert.pem
+    mkdir $LOCAL_MSP_PATH/signcerts && cp -r ../fabric-ca/$org/int/clients/$name/msp/signcerts/ $LOCAL_MSP_PATH/signcerts/
+    mkdir $LOCAL_MSP_PATH/keystore && cp -r ../fabric-ca/$org/int/clients/$name/msp/keystore/ $LOCAL_MSP_PATH/keystore/
 }
 
 function createTLSFolder(){
     org=$1
-    node=$2
+    name=$2
     type=$3
 
-    NODE_TLS_PATH=../fabric-ca/$org/${type}s/$node/tls
-    #if test "$type" = "orderer"
-    #then
-    #    NODE_TLS_PATH=../fabric-ca/$org/orderers/$node/tls
-    #fi
-    mkdir -p $NODE_TLS_PATH
-    sudo cp ../fabric-ca/$org/tls-root/ca-cert.pem $NODE_TLS_PATH/ca.crt
-    sudo cp ../fabric-ca/$org/tls-int/clients/$node/msp/signcerts/cert.pem $NODE_TLS_PATH/server.crt
-    key=$(sudo find ../fabric-ca/$org/tls-int/clients/$node/msp/keystore -name *_sk)
-    sudo cp $key $NODE_TLS_PATH/server.key
+    TLS_FOLDER_PATH=../fabric-ca/$org/${type}s/$name/tls
+
+    mkdir -p $TLS_FOLDER_PATH
+    cp ../fabric-ca/$org/tls-int/ca-chain.pem $TLS_FOLDER_PATH/ca.crt
+    cp ../fabric-ca/$org/tls-int/clients/$name/msp/signcerts/cert.pem $TLS_FOLDER_PATH/server.crt
+    key=$(find ../fabric-ca/$org/tls-int/clients/$name/msp/keystore -name *_sk)
+    cp $key $TLS_FOLDER_PATH/server.key
 }
 
 createChannelMSP org1.acme.com
@@ -52,11 +46,25 @@ createChannelMSP org3.acme.com
 createChannelMSP acme.com
 
 createLocalMSP org1.acme.com peer0.org1.acme.com peer
-createLocalMSP org2.acme.com peer0.org2.acme.com peer
-createLocalMSP org3.acme.com peer0.org3.acme.com peer
-createLocalMSP acme.com orderer.acme.com orderer
-
 createTLSFolder org1.acme.com peer0.org1.acme.com peer
+
+createLocalMSP org2.acme.com peer0.org2.acme.com peer
 createTLSFolder org2.acme.com peer0.org2.acme.com peer
+
+createLocalMSP org3.acme.com peer0.org3.acme.com peer
 createTLSFolder org3.acme.com peer0.org3.acme.com peer
+
+createLocalMSP acme.com orderer.acme.com orderer
 createTLSFolder acme.com orderer.acme.com orderer
+
+createLocalMSP org1.acme.com admin@org1.acme.com user
+createTLSFolder org1.acme.com admin@org1.acme.com user
+
+createLocalMSP org2.acme.com admin@org2.acme.com user
+createTLSFolder org2.acme.com admin@org2.acme.com user
+
+createLocalMSP org3.acme.com admin@org3.acme.com user
+createTLSFolder org3.acme.com admin@org3.acme.com user
+
+createLocalMSP acme.com admin@acme.com user
+createTLSFolder acme.com admin@acme.com user
