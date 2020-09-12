@@ -80,3 +80,20 @@ issueTLSCertificates tls-int 10057 acme.com admin@acme.com adminpw admin "$CSR_N
 # issue certificates for orderer node identity and for orderer server tls
 issueCertificates int 10056 acme.com orderer.acme.com ordererpw orderer "$CSR_NAMES_ACME" ""
 issueTLSCertificates tls-int 10057 acme.com orderer.acme.com ordererpw orderer "$CSR_NAMES_ACME" "orderer.acme.com,localhost"
+
+# User1@org1.acme.com with OU of the departament it belongs to
+# In the Fabric CA Server configurations you can configure these posible OU, good practice is to separate them by channel and role in the channel
+#export CSR_NAMES_ORG1="C=CO,ST=Antioquia,L=Medellin,O=Org1,OU=Hyperledger Fabric"
+## register identity with int CA user1
+#export FABRIC_CA_CLIENT_HOME=../fabric-ca/org1.acme.com/int/clients/admin
+#fabric-ca-client register --id.name user1@org1.acme.com --id.secret user1pw --id.type client --id.affiliation org1.department2 -u http://admin:adminpw@localhost:7056
+## enroll registered identity
+#export FABRIC_CA_CLIENT_HOME=../fabric-ca/org1.acme.com/int/clients/user1@org1.acme.com
+#fabric-ca-client enroll -u http://user1@org1.acme.com:user1pw@localhost:7056 --csr.names "$CSR_NAMES_ORG1"
+## tls
+## register identity with TLS int CA user1
+#export FABRIC_CA_CLIENT_HOME=../fabric-ca/org1.acme.com/tls-int/clients/admin
+#fabric-ca-client register --id.name user1@org1.acme.com --id.secret user1pw --id.type client --id.affiliation org1.department2 -u http://admin:adminpw@localhost:7057
+## enroll registered identity
+#export FABRIC_CA_CLIENT_HOME=../fabric-ca/org1.acme.com/tls-int/clients/user1@org1.acme.com
+#fabric-ca-client enroll -u http://user1@org1.acme.com:user1pw@localhost:7057 --csr.names "$CSR_NAMES_ORG1" --csr.hosts "user1@org1.acme.com,localhost" --enrollment.profile tls
