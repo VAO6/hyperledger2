@@ -7,8 +7,13 @@ keystore/
 user/
 clients/
 tls/
+peers/
+orderers/
+users/
 *.pem
 *.db
+*.tx
+*.block
 IssuerPublicKey
 IssuerRevocationPublicKey
 
