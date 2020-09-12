@@ -268,14 +268,14 @@ signing:
       - digital signature
     expiry: 8760h
   profiles:
-    ca:
-      usage:
-        - cert sign
-        - crl sign
-      expiry: 43800h
-      caconstraint:
-        isca: true
-        maxpathlen: 0
+    #ca:
+    #  usage:
+    #    - cert sign
+    #    - crl sign
+    #  expiry: 43800h
+    #  caconstraint:
+    #    isca: true
+    #    maxpathlen: 0
     tls:
       usage:
         - signing
