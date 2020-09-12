@@ -8,8 +8,10 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 
+	"github.com/hyperledger/fabric-chaincode-go/pkg/cid"
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
 )
 
@@ -18,22 +20,47 @@ type SmartContract struct {
 	contractapi.Contract
 }
 
+// Error codes returned by failures with IOUStates
+var (
+	errMissingOU = errors.New("The identity does not belong to the OU required to execute this transaction")
+)
+
 //Food describes basic details of what makes up a food
 type Food struct {
-	Farmer  string `json:"farmer"`
-	Variety string `json:"variety"`
+	Farmer       string `json:"farmer"`
+	Organization string `json:"organization"`
+	Variety      string `json:"variety"`
 }
 
 // Set stores a food item in the state
-func (s *SmartContract) Set(ctx contractapi.TransactionContextInterface, foodID string, farmer string, variety string) error {
+func (s *SmartContract) Set(ctx contractapi.TransactionContextInterface, foodID string, variety string) error {
+	// Validaciones del remitente de la transacción
+	hasOU, err := cid.HasOUValue(ctx.GetStub(), "department2")
+	if err != nil {
+		return err
+	}
+	if !hasOU {
+		return errMissingOU
+	}
 
-	//Validaciones de sintaxis
+	identity := ctx.GetClientIdentity()
+	farmer, err := identity.GetID()
+	if err != nil {
+		return err
+	}
+	org, err := identity.GetMSPID()
+	if err != nil {
+		return err
+	}
 
-	//validaciones de negocio
+	// Validaciones de sintaxis
+
+	// Validaciones de negocio
 
 	food := Food{
-		Farmer:  farmer,
-		Variety: variety,
+		Farmer:       farmer,
+		Organization: org,
+		Variety:      variety,
 	}
 
 	foodAsBytes, err := json.Marshal(food)
