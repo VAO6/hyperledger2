@@ -14,14 +14,15 @@ function joinChannel() {
 function updateChannelWithAnchorTx() {
     org=$1
     msp=$2
-    peerAddress=$4
+    peerAddress=$3
+    ordererAddress=$4
 
     export CORE_PEER_ADDRESS=$peerAddress
     export CORE_PEER_LOCALMSPID=$msp
     export CORE_PEER_MSPCONFIGPATH=$(cd ../ && echo $PWD/fabric-ca/$org/users/admin@$org/msp)
-    export ORDERER_CA=$(cd ../ && echo $PWD/fabric-ca/acme.com/orderers/orderer.acme.com/tls/ca.crt)
+    export ORDERER_CA=$(cd ../ && echo $PWD/fabric-ca/$org/orderers/orderer.$org/tls/ca.crt)
 
-    peer channel update -c marketplace -f ../channel-artifacts/${msp}anchors.tx -o localhost:7050 --tls --cafile $ORDERER_CA
+    peer channel update -c marketplace -f ../channel-artifacts/${msp}anchors.tx -o $ordererAddress --tls --cafile $ORDERER_CA
 }
 
 which peer
@@ -35,7 +36,7 @@ export CORE_PEER_MSPCONFIGPATH=$(cd ../ && echo $PWD/fabric-ca/org1.acme.com/use
 export CLIENTAUTH_CERTFILE=$(cd ../ && echo $PWD/fabric-ca/org1.acme.com/users/admin@org1.acme.com/tls/server.crt)
 export CLIENTAUTH_KEYFILE=$(cd ../ && echo $PWD/fabric-ca/org1.acme.com/users/admin@org1.acme.com/tls/server.key)
 export CORE_PEER_LOCALMSPID=Org1MSP
-export ORDERER_CA=$(cd ../ && echo $PWD/fabric-ca/acme.com/orderers/orderer.acme.com/tls/ca.crt)
+export ORDERER_CA=$(cd ../ && echo $PWD/fabric-ca/org1.acme.com/orderers/orderer.org1.acme.com/tls/ca.crt)
 # Create the application channel
 peer channel create -o localhost:7050 -c marketplace -f ../channel-artifacts/channel.tx --outputBlock ../channel-artifacts/marketplace.genesis.block --tls --cafile $ORDERER_CA --clientauth --certfile $CLIENTAUTH_CERTFILE --keyfile $CLIENTAUTH_KEYFILE
 # Let the peers join the channel
@@ -43,6 +44,6 @@ joinChannel org1.acme.com Org1MSP localhost:7051
 joinChannel org2.acme.com Org2MSP localhost:8051
 joinChannel org3.acme.com Org3MSP localhost:9051
 # Set the anchor peers in the network
-updateChannelWithAnchorTx org1.acme.com Org1MSP localhost:7051
-updateChannelWithAnchorTx org2.acme.com Org2MSP localhost:8051
-updateChannelWithAnchorTx org3.acme.com Org3MSP localhost:9051
+updateChannelWithAnchorTx org1.acme.com Org1MSP localhost:7051 localhost:7050
+updateChannelWithAnchorTx org2.acme.com Org2MSP localhost:8051 localhost:8050
+updateChannelWithAnchorTx org3.acme.com Org3MSP localhost:9051 localhost:9050
