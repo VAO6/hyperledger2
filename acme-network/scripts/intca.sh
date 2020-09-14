@@ -25,11 +25,11 @@ fabric-ca-client enroll -u http://admin:adminpw@localhost:9056 --csr.names "$CSR
 export FABRIC_CA_CLIENT_HOME=../fabric-ca/org3.acme.com/tls-int/clients/admin
 fabric-ca-client enroll -u http://admin:adminpw@localhost:9057 --csr.names "$CSR_NAMES_ORG3"
 
-# ORG ACME
-export CSR_NAMES_ACME="C=BE,ST=Flemish Brabant,L=Louvain,O=Acme,OU=Hyperledger Fabric"
-# Enroll bootstrap identity of int CA
-export FABRIC_CA_CLIENT_HOME=../fabric-ca/acme.com/int/clients/admin
-fabric-ca-client enroll -u http://admin:adminpw@localhost:10056 --csr.names "$CSR_NAMES_ACME"
-# Enroll bootstrap identity of tls int CA
-export FABRIC_CA_CLIENT_HOME=../fabric-ca/acme.com/tls-int/clients/admin
-fabric-ca-client enroll -u http://admin:adminpw@localhost:10057 --csr.names "$CSR_NAMES_ACME"
+## ORG ACME
+#export CSR_NAMES_ACME="C=BE,ST=Flemish Brabant,L=Louvain,O=Acme,OU=Hyperledger Fabric"
+## Enroll bootstrap identity of int CA
+#export FABRIC_CA_CLIENT_HOME=../fabric-ca/acme.com/int/clients/admin
+#fabric-ca-client enroll -u http://admin:adminpw@localhost:10056 --csr.names "$CSR_NAMES_ACME"
+## Enroll bootstrap identity of tls int CA
+#export FABRIC_CA_CLIENT_HOME=../fabric-ca/acme.com/tls-int/clients/admin
+#fabric-ca-client enroll -u http://admin:adminpw@localhost:10057 --csr.names "$CSR_NAMES_ACME"
