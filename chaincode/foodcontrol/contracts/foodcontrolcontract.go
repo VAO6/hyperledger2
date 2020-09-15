@@ -1,46 +1,28 @@
-/*
-Business Blockchain Training & Consulting SpA. All Rights Reserved.
-www.blockchainempresarial.com
-email: ricardo@blockchainempresarial.com
-*/
-
-package main
+package contracts
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 
+	"github.com/braduf/curso-hyperledger-fabric/chaincode/foodcontrol/marketplace"
 	"github.com/hyperledger/fabric-chaincode-go/pkg/cid"
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
 )
 
-// SmartContract provides functions for control the food
-type SmartContract struct {
+// FoodControlContract provides functions to control the food
+type FoodControlContract struct {
 	contractapi.Contract
 }
 
-// Error codes returned by failures with IOUStates
-var (
-	errMissingOU = errors.New("The identity does not belong to the OU required to execute this transaction")
-)
-
-//Food describes basic details of what makes up a food
-type Food struct {
-	Farmer       string `json:"farmer"`
-	Organization string `json:"organization"`
-	Variety      string `json:"variety"`
-}
-
 // Set stores a food item in the state
-func (s *SmartContract) Set(ctx contractapi.TransactionContextInterface, foodID string, variety string) error {
+func (fcc *FoodControlContract) Set(ctx contractapi.TransactionContextInterface, foodID string, variety string) error {
 	// Validaciones del remitente de la transacción
 	hasOU, err := cid.HasOUValue(ctx.GetStub(), "department2")
 	if err != nil {
 		return err
 	}
 	if !hasOU {
-		return errMissingOU
+		return marketplace.ErrNoFarmer
 	}
 
 	identity := ctx.GetClientIdentity()
@@ -57,7 +39,7 @@ func (s *SmartContract) Set(ctx contractapi.TransactionContextInterface, foodID 
 
 	// Validaciones de negocio
 
-	food := Food{
+	food := marketplace.Food{
 		Farmer:       farmer,
 		Organization: org,
 		Variety:      variety,
@@ -73,7 +55,7 @@ func (s *SmartContract) Set(ctx contractapi.TransactionContextInterface, foodID 
 }
 
 // Query obtains a food item from the state by its id
-func (s *SmartContract) Query(ctx contractapi.TransactionContextInterface, foodID string) (*Food, error) {
+func (fcc *FoodControlContract) Query(ctx contractapi.TransactionContextInterface, foodID string) (*marketplace.Food, error) {
 
 	foodAsBytes, err := ctx.GetStub().GetState(foodID)
 
@@ -85,7 +67,7 @@ func (s *SmartContract) Query(ctx contractapi.TransactionContextInterface, foodI
 		return nil, fmt.Errorf("%s does not exist", foodID)
 	}
 
-	food := new(Food)
+	food := new(marketplace.Food)
 
 	err = json.Unmarshal(foodAsBytes, food)
 	if err != nil {
@@ -93,18 +75,4 @@ func (s *SmartContract) Query(ctx contractapi.TransactionContextInterface, foodI
 	}
 
 	return food, nil
-}
-
-func main() {
-
-	chaincode, err := contractapi.NewChaincode(new(SmartContract))
-
-	if err != nil {
-		fmt.Printf("Error create foodcontrol chaincode: %s", err.Error())
-		return
-	}
-
-	if err := chaincode.Start(); err != nil {
-		fmt.Printf("Error starting foodcontrol chaincode: %s", err.Error())
-	}
 }
