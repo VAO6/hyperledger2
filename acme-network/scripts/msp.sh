@@ -76,3 +76,12 @@ createTLSFolder org3.acme.com admin@org3.acme.com user
 
 #createLocalMSP acme.com admin@acme.com user
 #createTLSFolder acme.com admin@acme.com user
+
+createLocalMSP org1.acme.com client@org1.acme.com user
+createTLSFolder org1.acme.com client@org1.acme.com user
+
+createLocalMSP org2.acme.com client@org2.acme.com user
+createTLSFolder org2.acme.com client@org2.acme.com user
+
+createLocalMSP org3.acme.com client@org3.acme.com user
+createTLSFolder org3.acme.com client@org3.acme.com user

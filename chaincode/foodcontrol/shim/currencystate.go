@@ -36,7 +36,7 @@ func PutCurrencyTrustline(stub shim.ChaincodeStubInterface, currencyCode string,
 	if err != nil {
 		return
 	}
-	err = PutState(stub, currencyCode, key, tl)
+	err = PutState(stub, TrustlineDocType, key, tl)
 	return
 }
 
