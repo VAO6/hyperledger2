@@ -72,3 +72,7 @@ cleanLocalMSP org1.acme.com admin@org1.acme.com user
 cleanLocalMSP org2.acme.com admin@org2.acme.com user
 cleanLocalMSP org3.acme.com admin@org3.acme.com user
 #cleanLocalMSP acme.com admin@acme.com user
+
+cleanLocalMSP org1.acme.com client@org1.acme.com user
+cleanLocalMSP org2.acme.com client@org2.acme.com user
+cleanLocalMSP org3.acme.com client@org3.acme.com user

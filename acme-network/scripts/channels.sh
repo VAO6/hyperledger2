@@ -1,12 +1,13 @@
 function joinChannel() {
   org=$1
   mspID=$2
-  peerAddress=$3
+  peerName=$3
+  peerAddress=$4
 
   export CORE_PEER_ADDRESS=$peerAddress
   export CORE_PEER_LOCALMSPID=$mspID
   export CORE_PEER_TLS_ENABLED=true
-  export CORE_PEER_TLS_ROOTCERT_FILE=$(cd ../ && echo $PWD/fabric-ca/$org/peers/peer0.$org/tls/ca.crt)
+  export CORE_PEER_TLS_ROOTCERT_FILE=$(cd ../ && echo $PWD/fabric-ca/$org/peers/$peerName/tls/ca.crt)
   export CORE_PEER_MSPCONFIGPATH=$(cd ../ && echo $PWD/fabric-ca/$org/users/admin@$org/msp)
   peer channel join -b ../channel-artifacts/marketplace.genesis.block
 }
@@ -39,10 +40,11 @@ export CORE_PEER_LOCALMSPID=Org1MSP
 export ORDERER_CA=$(cd ../ && echo $PWD/fabric-ca/org1.acme.com/orderers/orderer.org1.acme.com/tls/ca.crt)
 # Create the application channel
 peer channel create -o localhost:7050 -c marketplace -f ../channel-artifacts/channel.tx --outputBlock ../channel-artifacts/marketplace.genesis.block --tls --cafile $ORDERER_CA --clientauth --certfile $CLIENTAUTH_CERTFILE --keyfile $CLIENTAUTH_KEYFILE
+sleep 1
 # Let the peers join the channel
-joinChannel org1.acme.com Org1MSP localhost:7051
-joinChannel org2.acme.com Org2MSP localhost:8051
-joinChannel org3.acme.com Org3MSP localhost:9051
+joinChannel org1.acme.com Org1MSP peer0.org1.acme.com localhost:7051
+joinChannel org2.acme.com Org2MSP peer0.org2.acme.com localhost:8051
+joinChannel org3.acme.com Org3MSP peer0.org3.acme.com localhost:9051
 # Set the anchor peers in the network
 updateChannelWithAnchorTx org1.acme.com Org1MSP localhost:7051 localhost:7050
 updateChannelWithAnchorTx org2.acme.com Org2MSP localhost:8051 localhost:8050
