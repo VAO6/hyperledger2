@@ -1,6 +1,8 @@
 package contracts
 
 import (
+	"fmt"
+
 	"github.com/braduf/curso-hyperledger-fabric/chaincode/foodcontrol/marketplace"
 	"github.com/braduf/curso-hyperledger-fabric/chaincode/foodcontrol/shim"
 	"github.com/hyperledger/fabric-chaincode-go/pkg/cid"
@@ -88,15 +90,18 @@ func (cc *CurrencyContract) Transfer(ctx CustomTransactionContextInterface, utxo
 	// Validate parameters
 	if len(utxoIDSet) == 0 {
 		err = marketplace.ErrTransferEmptyUTXOSet
+		fmt.Printf(err.Error())
 		return
 	}
 	if amount <= 0 {
 		err = marketplace.ErrNegativeMintAmount
+		fmt.Printf(err.Error())
 		return
 	}
 	// TODO: Check decimals of amount
 	if receiver == "" {
 		err = marketplace.ErrMintReceiverRequiered
+		fmt.Printf(err.Error())
 		return
 	}
 
@@ -108,12 +113,14 @@ func (cc *CurrencyContract) Transfer(ctx CustomTransactionContextInterface, utxo
 		// Check duplicate ID in utxo set
 		if spentUTXO[utxoID] {
 			err = marketplace.ErrDoubleSpentTransfer
+			fmt.Printf(err.Error())
 			return
 		}
 		// Obtain UTXO from state
 		var utxo marketplace.CurrencyUTXO
 		utxo, err = shim.GetCurrencyUTXOByID(ctx.GetStub(), cc.Currency.Code, utxoID)
 		if err != nil {
+			fmt.Printf(err.Error())
 			return
 		}
 		// Set issuer of the first utxo in the set
@@ -124,29 +131,35 @@ func (cc *CurrencyContract) Transfer(ctx CustomTransactionContextInterface, utxo
 			tl, err = shim.GetCurrencyTrustline(ctx.GetStub(), cc.Currency.Code, receiver, issuer)
 			if err == shim.ErrStateNotFound {
 				err = marketplace.ErrTransferTrustline
+				fmt.Printf(err.Error())
 				return
 			}
 			if err != nil {
+				fmt.Printf(err.Error())
 				return
 			}
 			if !tl.Trust {
 				err = marketplace.ErrTransferTrustline
+				fmt.Printf(err.Error())
 				return
 			}
 		}
 		// Check issuer
 		if utxo.Issuer != issuer {
 			err = marketplace.ErrOnlySameIssuerTransfer
+			fmt.Printf(err.Error())
 			return
 		}
 		// Check owner
 		if utxo.Owner != ctx.GetMSPID() {
 			err = marketplace.ErrOnlyOwnerTransfer
+			fmt.Printf(err.Error())
 			return
 		}
 		// Check redemption status
 		if utxo.RedemptionPending {
 			err = marketplace.ErrPendingRedemptionTransfer
+			fmt.Printf(err.Error())
 			return
 		}
 		// Add value to input amount
@@ -154,6 +167,7 @@ func (cc *CurrencyContract) Transfer(ctx CustomTransactionContextInterface, utxo
 
 		err = shim.DeleteCurrencyUTXO(ctx.GetStub(), cc.Currency.Code, utxoID)
 		if err != nil {
+			fmt.Printf(err.Error())
 			return
 		}
 		spentUTXO[utxoID] = true
@@ -163,6 +177,7 @@ func (cc *CurrencyContract) Transfer(ctx CustomTransactionContextInterface, utxo
 	var transferUTXO, changeUTXO marketplace.CurrencyUTXO
 	if totalInputAmount < amount {
 		err = marketplace.ErrInsufficientTransferFunds
+		fmt.Printf(err.Error())
 		return
 	}
 	transferUTXO = marketplace.CurrencyUTXO{
@@ -173,6 +188,7 @@ func (cc *CurrencyContract) Transfer(ctx CustomTransactionContextInterface, utxo
 	}
 	err = shim.PutCurrencyUTXO(ctx.GetStub(), cc.Currency.Code, transferUTXO)
 	if err != nil {
+		fmt.Printf(err.Error())
 		return
 	}
 
@@ -186,19 +202,21 @@ func (cc *CurrencyContract) Transfer(ctx CustomTransactionContextInterface, utxo
 		}
 		err = shim.PutCurrencyUTXO(ctx.GetStub(), cc.Currency.Code, changeUTXO)
 		if err != nil {
+			fmt.Printf(err.Error())
 			return
 		}
 	}
 
 	// Set the event payload
 	payload = marketplace.TransferedPayload{
-		TransferedBy:     ctx.GetMSPID(),
-		SpentUTXOIDSet:   utxoIDSet,
+		TransferedBy: ctx.GetMSPID(),
+		//SpentUTXOIDSet:   utxoIDSet,
 		ChangeUTXOID:     changeUTXO.ID,
 		TransferedUTXOID: transferUTXO.ID,
 		Receiver:         receiver,
 		CurrencyCode:     cc.Currency.Code,
 	}
+	fmt.Printf("End of Transfer: " + payload.TransferedUTXOID)
 	//ctx.SetEventPayload(payload)
 	return
 }

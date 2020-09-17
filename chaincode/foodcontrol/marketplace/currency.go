@@ -45,12 +45,12 @@ type MintedPayload struct {
 
 // TransferedPayload is the payload of the Transfered Events
 type TransferedPayload struct {
-	TransferedBy     string   `json:"transferedBy"`
-	SpentUTXOIDSet   []string `json:"spentUtxoIdSet"`
-	ChangeUTXOID     string   `json:"changeUtxoId"`
-	TransferedUTXOID string   `json:"transferedUtxoId"`
-	Receiver         string   `json:"receiver"`
-	CurrencyCode     string   `json:"currencyCode"`
+	TransferedBy string `json:"transferedBy"`
+	//SpentUTXOIDSet   []string `json:"spentUtxoIdSet"`
+	ChangeUTXOID     string `json:"changeUtxoId"`
+	TransferedUTXOID string `json:"transferedUtxoId"`
+	Receiver         string `json:"receiver"`
+	CurrencyCode     string `json:"currencyCode"`
 }
 
 // RedemptionRequestedPayload is the payload of the RedemptionRequested Events
