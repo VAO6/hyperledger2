@@ -196,7 +196,6 @@ Orderer: &OrdererDefaults
         BlockValidation:
             Type: ImplicitMeta
             Rule: "ANY Orderers"
-            # Rule: "ANY Writers"
 
 ################################################################################
 #

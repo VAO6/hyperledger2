@@ -154,12 +154,17 @@ func PutRedeemPrivateData(stub shim.ChaincodeStubInterface, transient map[string
 	if err != nil {
 		return
 	}
-	err = PutPrivateData(stub, ImplicitCollectionPrefix+dataReceiver, RedeemPrivateDataDocType, key, marketplace.RedeemPrivateData{
-		UtxoID:        utxoID,
-		AccountNumber: accountNumber,
-		Bank:          bank,
-	})
-
+	err = PutPrivateData(
+		stub,
+		ImplicitCollectionPrefix+dataReceiver,
+		RedeemPrivateDataDocType,
+		key,
+		marketplace.RedeemPrivateData{
+			UtxoID:        utxoID,
+			AccountNumber: accountNumber,
+			Bank:          bank,
+		},
+	)
 	return
 }
 
@@ -174,6 +179,6 @@ func PutMintPrivateData(stub shim.ChaincodeStubInterface, transient map[string][
 	if err != nil {
 		return
 	}
-	err = PutPrivateData(stub, currencyCode+"Auditors", MintPrivateDataDocType, key, transient)
+	err = PutPrivateData(stub, currencyCode+"Auditors", MintPrivateDataDocType, key, mintPrivateData)
 	return
 }
