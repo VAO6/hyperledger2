@@ -11,10 +11,15 @@ import (
 	"github.com/hyperledger/fabric-protos-go/ledger/queryresult"
 )
 
+// Technical shim errors
 var (
-	// ErrStateNotFound is an error that is thrown when a value is not found for a key in the World State
-	ErrStateNotFound = errors.New("State was not found")
+	ErrStateNotFound        = errors.New("State was not found")
+	ErrWrongTransFieldName  = errors.New("The requested field is not present in the transient data")
+	ErrEmptyTransFieldValue = errors.New("The transient field has an empty value")
 )
+
+// ImplicitCollectionPrefix should be followed by the MSP ID of the organization of the collection to store private data in
+var ImplicitCollectionPrefix = "_implicit_org_"
 
 // State represents an entry in the World State
 type State struct {
@@ -177,5 +182,37 @@ func Any(it shim.StateQueryIteratorInterface, predicate func(*queryresult.KV) (b
 			return
 		}
 	}
+	return
+}
+
+// GetTransientDataValue is a function that obtains the value of a specific field of the private data
+func GetTransientDataValue(stub shim.ChaincodeStubInterface, transient map[string][]byte, transientFieldName string, v interface{}) (err error) {
+	transVal, ok := transient[transientFieldName]
+	if !ok {
+		err = ErrWrongTransFieldName
+		return
+	}
+
+	if len(transVal) == 0 {
+		err = ErrEmptyTransFieldValue
+	}
+
+	err = json.Unmarshal(transVal, v)
+	return
+}
+
+// PutPrivateData is a function that stores data in a private data collection
+func PutPrivateData(stub shim.ChaincodeStubInterface, collection string, docType string, key string, v interface{}) (err error) {
+	state := State{
+		docType,
+		v,
+	}
+
+	value, err := json.Marshal(&state)
+	if err != nil {
+		return
+	}
+
+	err = stub.PutPrivateData(collection, key, value)
 	return
 }
