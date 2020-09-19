@@ -17,8 +17,14 @@ type CurrencyTrustlineState struct {
 	Value   marketplace.CurrencyTrustline
 }
 
-// TrustlineDocType is the Document type a trustline will be stored under in the World State
-var TrustlineDocType = "TL"
+var (
+	// TrustlineDocType is the Document type a trustline will be stored under in the World State
+	TrustlineDocType = "TL"
+	// RedeemPrivateDataDocType is the Document type the private data of a redeem transaction will be stored under in the World State
+	RedeemPrivateDataDocType = "REDEEM"
+	// MintPrivateDataDocType is the Document type the private data of a minting transaction will be stored under in the World State
+	MintPrivateDataDocType = "MINT"
+)
 
 // PutCurrencyUTXO stores a UTXO as a state in the World State
 func PutCurrencyUTXO(stub shim.ChaincodeStubInterface, currencyCode string, utxo marketplace.CurrencyUTXO) (err error) {
@@ -82,6 +88,23 @@ func GetCurrencyTrustline(stub shim.ChaincodeStubInterface, currencyCode string,
 	return
 }
 
+// CheckCurrencyTrustline is a function that will return an error if a trustline doesn't exist or if it is set to false, meaning the receiver doesn't trust the issuer
+func CheckCurrencyTrustline(stub shim.ChaincodeStubInterface, currencyCode string, receiver string, issuer string) (err error) {
+	tl, err := GetCurrencyTrustline(stub, currencyCode, receiver, issuer)
+	if err == ErrStateNotFound {
+		err = marketplace.ErrTransferTrustline
+		return
+	}
+	if err != nil {
+		return
+	}
+	if !tl.Trust {
+		err = marketplace.ErrTransferTrustline
+		return
+	}
+	return
+}
+
 // GetHistoryForCurrencyUTXOID retrieves all state changes a UTXO with the specified ID has gone through
 func GetHistoryForCurrencyUTXOID(stub shim.ChaincodeStubInterface, currencyCode string, id string) (historyJSONString string, err error) {
 	key, err := stub.CreateCompositeKey(currencyCode, []string{id})
@@ -108,5 +131,45 @@ func SetCurrencyEvent(stub shim.ChaincodeStubInterface, payload interface{}) (er
 		return
 	}
 	err = SetEvent(stub, event, payload)
+	return
+}
+
+// PutRedeemPrivateData is a function to store private data linked to a redeem request
+func PutRedeemPrivateData(stub shim.ChaincodeStubInterface, transient map[string][]byte, dataReceiver string, utxoID string) (err error) {
+	var accountNumber, bank string
+	err = GetTransientDataValue(stub, transient, "accountNumber", &accountNumber)
+	if err != nil {
+		return
+	}
+	err = GetTransientDataValue(stub, transient, "bank", &bank)
+	if err != nil {
+		return
+	}
+
+	key, err := stub.CreateCompositeKey(RedeemPrivateDataDocType, []string{stub.GetTxID()})
+	if err != nil {
+		return
+	}
+	err = PutPrivateData(stub, ImplicitCollectionPrefix+dataReceiver, RedeemPrivateDataDocType, key, marketplace.RedeemPrivateData{
+		UtxoID:        utxoID,
+		AccountNumber: accountNumber,
+		Bank:          bank,
+	})
+
+	return
+}
+
+// PutMintPrivateData is a function to store private data linked to a minting transaction
+func PutMintPrivateData(stub shim.ChaincodeStubInterface, transient map[string][]byte, currencyCode string) (err error) {
+	var mintPrivateData interface{}
+	err = GetTransientDataValue(stub, transient, "mintPrivateData", &mintPrivateData)
+	if err != nil {
+		return
+	}
+	key, err := stub.CreateCompositeKey(MintPrivateDataDocType, []string{stub.GetTxID()})
+	if err != nil {
+		return
+	}
+	err = PutPrivateData(stub, currencyCode+"Auditors", MintPrivateDataDocType, key, transient)
 	return
 }

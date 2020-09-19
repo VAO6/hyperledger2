@@ -9,6 +9,8 @@ type CustomTransactionContextInterface interface {
 	contractapi.TransactionContextInterface
 	GetMSPID() string
 	SetMSPID(string)
+	GetTransient() map[string][]byte
+	SetTransient(map[string][]byte)
 	//GetEventPayload() interface{}
 	//SetEventPayload(interface{})
 }
@@ -17,7 +19,8 @@ type CustomTransactionContextInterface interface {
 // with before and after transaction hooks
 type CustomTransactionContext struct {
 	contractapi.TransactionContext
-	mspID string
+	mspID     string
+	transient map[string][]byte
 	//eventPayload interface{}
 }
 
@@ -29,6 +32,16 @@ func (ctc *CustomTransactionContext) GetMSPID() string {
 // SetMSPID provides a value for MSP ID
 func (ctc *CustomTransactionContext) SetMSPID(mspID string) {
 	ctc.mspID = mspID
+}
+
+// GetTransient returns set MSP ID
+func (ctc *CustomTransactionContext) GetTransient() map[string][]byte {
+	return ctc.transient
+}
+
+// SetTransient provides a value for MSP ID
+func (ctc *CustomTransactionContext) SetTransient(transient map[string][]byte) {
+	ctc.transient = transient
 }
 
 /* // GetEventPayload returns set payload for the transaction event
