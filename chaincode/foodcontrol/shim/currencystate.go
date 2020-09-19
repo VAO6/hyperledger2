@@ -136,7 +136,7 @@ func SetCurrencyEvent(stub shim.ChaincodeStubInterface, payload interface{}) (er
 
 // PutRedeemPrivateData is a function to store private data linked to a redeem request
 func PutRedeemPrivateData(stub shim.ChaincodeStubInterface, transient map[string][]byte, dataReceiver string, utxoID string) (err error) {
-	var accountNumber, bank string
+	var accountNumber, bank, salt string
 	err = GetTransientDataValue(stub, transient, "accountNumber", &accountNumber)
 	if err != nil {
 		return
@@ -145,8 +145,12 @@ func PutRedeemPrivateData(stub shim.ChaincodeStubInterface, transient map[string
 	if err != nil {
 		return
 	}
+	err = GetTransientDataValue(stub, transient, "salt", &salt)
+	if err != nil {
+		return
+	}
 
-	key, err := stub.CreateCompositeKey(RedeemPrivateDataDocType, []string{stub.GetTxID()})
+	key, err := stub.CreateCompositeKey(RedeemPrivateDataDocType, []string{stub.GetTxID(), salt})
 	if err != nil {
 		return
 	}

@@ -39,7 +39,6 @@ peer lifecycle chaincode commit -o $ORDERER_ADDRESS --channelID $CHANNEL_NAME --
 export CORE_PEER_MSPCONFIGPATH=$(cd ../acme-network && echo $PWD/fabric-ca/org3.acme.com/users/admin@org3.acme.com/msp)
 # MINT
 export DATA=$(echo -n "{\"depositReference\":\"ABC1234567\",\"bank\":\"Bancolombia\"}" | base64 | tr -d \\n)
-export SALT=$(echo -n "?2#LHX=UcUzf-t7nM#FJ1Opdq#PLKJ#w" | base64 | tr -d \\n)
 peer chaincode invoke -o $ORDERER_ADDRESS --tls --cafile $ORDERER_CA -C $CHANNEL_NAME -n $CC_NAME -c '{ "Args": ["USDCurrencyContract:Mint", "5000", "Org3MSP"] }' --peerAddresses $CORE_PEER_ADDRESS --peerAddresses localhost:8051 --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE --tlsRootCertFiles $(cd ../acme-network && echo $PWD/fabric-ca/org2.acme.com/peers/peer0.org2.acme.com/tls/ca.crt) --transient "{\"mintPrivateDate\":\"$DATA\",\"salt\":\"$SALT\"}"
 # TRANSFER
 peer chaincode invoke -o $ORDERER_ADDRESS --tls --cafile $ORDERER_CA -C $CHANNEL_NAME -n $CC_NAME -c '{ "Args": ["COPCurrencyContract:Transfer", "[\"782542530564c28af34f52738ccca5d4404017850e39269fd394256ac7942bcb:0\",\"de3aa2f06ca5b4dbbbff886591a1fc47993a4a0d0190541712c6457612d49f53:1\"]", "18000", "Org2MSP"] }' --peerAddresses $CORE_PEER_ADDRESS --peerAddresses localhost:8051 --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE --tlsRootCertFiles $(cd ../acme-network && echo $PWD/fabric-ca/org2.acme.com/peers/peer0.org2.acme.com/tls/ca.crt)
@@ -49,8 +48,8 @@ export CORE_PEER_LOCALMSPID=Org2MSP
 # SET TRUSTLINE
 peer chaincode invoke -o $ORDERER_ADDRESS --tls --cafile $ORDERER_CA -C $CHANNEL_NAME -n $CC_NAME -c '{ "Args": ["COPCurrencyContract:SetTrustline", "Org3MSP", "true", "-1"] }' --peerAddresses $CORE_PEER_ADDRESS --peerAddresses localhost:8051 --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE --tlsRootCertFiles $(cd ../acme-network && echo $PWD/fabric-ca/org2.acme.com/peers/peer0.org2.acme.com/tls/ca.crt)
 # REDEEM
-export ACCOUNTNUMBER=$(echo -n "123-45678-90" | base64 | tr -d \\n)
-export BANK=$(echo -n "Bancolombia" | base64 | tr -d \\n)
+export ACCOUNTNUMBER=$(echo -n "123-45678-90TszpOwQUjK?9K=Tk3z#jQQ4VV:SA=P26" | base64 | tr -d \\n)
+export BANK=$(echo -n "BancolombiaTszpOwQUjK?9K=Tk3z#jQQ4VV:SA=P26" | base64 | tr -d \\n)
 export SALT=$(echo -n "TszpOwQUjK?9K=Tk3z#jQQ4VV:SA=P26" | base64 | tr -d \\n)
 peer chaincode invoke -o $ORDERER_ADDRESS --tls --cafile $ORDERER_CA -C $CHANNEL_NAME -n $CC_NAME -c '{ "Args": ["COPCurrencyContract:Redeem", "fbaa859c200bcc6334902eb3ef78f14be70c63b55a0b1038d47acc0bddcdc5c9:0"] }' --peerAddresses $CORE_PEER_ADDRESS --peerAddresses localhost:8051 --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE --tlsRootCertFiles $(cd ../acme-network && echo $PWD/fabric-ca/org2.acme.com/peers/peer0.org2.acme.com/tls/ca.crt) --transient "{\"accountNumber\":\"$ACCOUNTNUMBER\",\"bank\":\"$BANK\",\"salt\":\"$SALT\"}"
 # QUERY COUCHDB
