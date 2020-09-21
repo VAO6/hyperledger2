@@ -23,7 +23,8 @@ function createLocalMSP() {
     mkdir $LOCAL_MSP_PATH/tlscacerts && cp ../fabric-ca/$org/tls-root/ca-cert.pem $LOCAL_MSP_PATH/tlscacerts/ca-cert.pem
     mkdir $LOCAL_MSP_PATH/tlsintermediatecerts && cp ../fabric-ca/$org/tls-int/ca-cert.pem $LOCAL_MSP_PATH/tlsintermediatecerts/ca-cert.pem
     mkdir $LOCAL_MSP_PATH/signcerts && cp -r ../fabric-ca/$org/int/clients/$name/msp/signcerts $LOCAL_MSP_PATH/
-    mkdir $LOCAL_MSP_PATH/keystore && cp -r ../fabric-ca/$org/int/clients/$name/msp/keystore $LOCAL_MSP_PATH/
+    key=$(find ../fabric-ca/$org/int/clients/$name/msp/keystore -name *_sk)
+    mkdir $LOCAL_MSP_PATH/keystore && cp $key $LOCAL_MSP_PATH/keystore/priv.key
 }
 
 function createTLSFolder(){
