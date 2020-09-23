@@ -1,0 +1,62 @@
+test:
+  name: "Currency Contract Benchmarking"
+  description: "This benchmark scenario will use currency contract transactions, from minting to transfering to redeeming."
+  workers:
+    type: local
+    number: 5
+  rounds:
+    - label: mint
+      txNumber: 100
+      rateControl:
+        type: fixed-rate
+        opts:
+          tps: 25
+      callback: benchmarks/callbacks/foodcontrol/currency/mint.js
+      arguments:
+        currencyCode: USD
+        minterOrg: Org1
+        minter: Org1MSP
+        client: client@org1.acme.com
+        receiverOrg: Org2
+        receiver: Org2MSP
+        receiverClient: client@org2.acme.com
+        amount: 100
+        depositReference: DEP1234567890
+        depositBank: Bancolombia
+    #- label: transfer
+    #  txNumber: 500
+    #  rateControl:
+    #    type: fixed-rate
+    #    opts:
+    #      tps: 25
+    #  callback: benchmarks/callbacks/foodcontrol/currency/transfer.js
+    #  arguments:
+    #- label: redeem
+    #  txNumber: 1
+    #  rateControl:
+    #    type: fixed-rate
+    #    opts:
+    #      tps: 25
+    #  callback: benchmarks/callbacks/foodcontrol/currency/redeem.js
+    #  arguments:
+observer:
+  type: local
+  interval: 1
+  #type: prometheus
+  #interval: 5
+monitor:
+  interval: 1
+  type: ["docker"]
+  docker:
+    containers: ["all"]
+  #prometheus:
+  #  url: "http://prometheus:9090"
+  #  push_url: "http://pushGateway:9091"
+  #  metrics:
+  #    ignore: [prometheus, pushGateway, cadvisor, grafana, node-exporter]
+  #    include:
+  #      Endorse Time (s):
+  #        query: rate(endorser_propsal_duration_sum{chaincode="foodmarketplace:v1.0"}[5m])/rate(endorser_propsal_duration_count{chaincode="foodmarketplace:v1.0"}[5m])
+  #        step: 1
+  #        label: instance
+  #        statistic: avg

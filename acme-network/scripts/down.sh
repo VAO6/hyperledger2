@@ -1,7 +1,11 @@
 cd .. && docker-compose -f docker-compose-root-ca.yaml -f docker-compose-int-ca.yaml -f docker-compose-cli-couchdb.yaml down
-docker rm $(docker ps -aq --filter 'exited=0')
-docker rm $(docker ps -aq --filter 'exited=137')
-docker rmi $(docker images -q --filter=reference='dev*:latest')
+docker rm $(docker ps -aq --filter 'name=cli')
+docker rm $(docker ps -aq --filter 'name=peer')
+docker rm $(docker ps -aq --filter 'name=couch')
+docker rm $(docker ps -aq --filter 'name=orderer')
+docker rm $(docker ps -aq --filter 'name=ca')
+docker rm $(docker ps -aq --filter 'name=foodmarketplace')
+docker rmi $(docker images -q --filter 'reference=*foodmarketplace*')
 cd scripts && ./cleancerts.sh
 rm -r ../channel-artifacts/*
 rm -r ../fabric-ca/org1.acme.com/peers/peer0.org1.acme.com/production

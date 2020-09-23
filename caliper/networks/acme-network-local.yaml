@@ -1,0 +1,152 @@
+---
+name: acme-network-local
+version: "1.0"
+caliper:
+  blockchain: fabric
+organizations:
+  Org1:
+    mspid: Org1MSP
+    peers:
+      - peer0.org1.acme.com
+    #certificateAuthorities:
+    #  - #  int.ca.org1.acme.com:
+    adminPrivateKey:
+      path: ../acme-network/fabric-ca/org1.acme.com/users/admin@org1.acme.com/msp/keystore/priv.key
+    signedCert:
+      path: ../acme-network/fabric-ca/org1.acme.com/users/admin@org1.acme.com/msp/signcerts/cert.pem
+  Org2:
+    mspid: Org2MSP
+    peers:
+      - peer0.org2.acme.com
+    #certificateAuthorities:
+    #  - #  int.ca.org2.acme.com:
+    adminPrivateKey:
+      path: ../acme-network/fabric-ca/org2.acme.com/users/admin@org2.acme.com/msp/keystore/priv.key
+    signedCert:
+      path: ../acme-network/fabric-ca/org2.acme.com/users/admin@org2.acme.com/msp/signcerts/cert.pem
+  Org3:
+    mspid: Org3MSP
+    peers:
+      - peer0.org3.acme.com
+    #certificateAuthorities:
+    #  - #  int.ca.org3.acme.com:
+    adminPrivateKey:
+      path: ../acme-network/fabric-ca/org3.acme.com/users/admin@3.acme.com/msp/keystore/priv.key
+    signedCert:
+      path: ../acme-network/fabric-ca/org3.acme.com/users/admin@org3.acme.com/msp/signcerts/cert.pem
+channels:
+  marketplace:
+    orderers:
+      - orderer.org1.acme.com
+      - orderer.org2.acme.com
+      - orderer.org3.acme.com
+    peers:
+      peer0.org1.acme.com:
+        eventSource: true
+      peer0.org2.acme.com:
+        eventSource: true
+      peer0.org3.acme.com:
+        eventSource: true
+    created: true
+    chaincodes:
+      - id: foodmarketplace
+        version: v1.0
+        language: golang
+clients:
+  client@org1.acme.com:
+    client:
+      organization: Org1
+      connection:
+        timeout:
+          peer:
+            endorser: "300"
+      credentialStore:
+        path: tmp/hfc-kvs/org1
+        cryptoStore:
+          path: tmp/hfc-kvs/org1
+      clientPrivateKey:
+        path: ../acme-network/fabric-ca/org1.acme.com/users/client@org1.acme.com/msp/keystore/priv.key
+      clientSignedCert:
+        path: ../acme-network/fabric-ca/org1.acme.com/users/client@org1.acme.com/msp/signcerts/cert.pem
+  client@org2.acme.com:
+    client:
+      organization: Org2
+      connection:
+        timeout:
+          peer:
+            endorser: "300"
+      credentialStore:
+        path: tmp/hfc-kvs/org2
+        cryptoStore:
+          path: tmp/hfc-kvs/org2
+      clientPrivateKey:
+        path: ../acme-network/fabric-ca/org2.acme.com/users/client@org2.acme.com/msp/keystore/priv.key
+      clientSignedCert:
+        path: ../acme-network/fabric-ca/org2.acme.com/users/client@org2.acme.com/msp/signcerts/cert.pem
+  client@org3.acme.com:
+    client:
+      organization: Org3
+      connection:
+        timeout:
+          peer:
+            endorser: "300"
+      credentialStore:
+        path: tmp/hfc-kvs/org3
+        cryptoStore:
+          path: tmp/hfc-kvs/org3
+      clientPrivateKey:
+        path: ../acme-network/fabric-ca/org3.acme.com/users/client@org3.acme.com/msp/keystore/priv.key
+      clientSignedCert:
+        path: ../acme-network/fabric-ca/org3.acme.com/users/client@org3.acme.com/msp/signcerts/cert.pem
+peers:
+  peer0.org1.acme.com:
+    url: grpcs://localhost:7051
+    tlsCACerts:
+      path: ../acme-network/fabric-ca/org1.acme.com/tls-int/ca-chain.pem
+    grpcOptions:
+      ssl-target-name-override: peer0.org1.acme.com
+      hostnameOverride: peer0.org1.acme.com
+  peer0.org2.acme.com:
+    url: grpcs://localhost:8051
+    tlsCACerts:
+      path: ../acme-network/fabric-ca/org2.acme.com/tls-int/ca-chain.pem
+    grpcOptions:
+      ssl-target-name-override: peer0.org2.acme.com
+      hostnameOverride: peer0.org2.acme.com
+  peer0.org3.acme.com:
+    url: grpcs://localhost:9051
+    tlsCACerts:
+      path: ../acme-network/fabric-ca/org3.acme.com/tls-int/ca-chain.pem
+    grpcOptions:
+      ssl-target-name-override: peer0.org3.acme.com
+      hostnameOverride: peer0.org3.acme.com
+orderers:
+  orderer.org1.acme.com:
+    url: grpcs://localhost:7050
+    grpcOptions:
+      ssl-target-name-override: orderer.org1.acme.com
+    tlsCACerts:
+      path: ../acme-network/fabric-ca/org1.acme.com/tls-int/ca-chain.pem
+  orderer.org2.acme.com:
+    url: grpcs://localhost:8050
+    grpcOptions:
+      ssl-target-name-override: orderer.org2.acme.com
+    tlsCACerts:
+      path: ../acme-network/fabric-ca/org2.acme.com/tls-int/ca-chain.pem
+  orderer.org3.acme.com:
+    url: grpcs://localhost:9050
+    grpcOptions:
+      ssl-target-name-override: orderer.org3.acme.com
+    tlsCACerts:
+      path: ../acme-network/fabric-ca/org3.acme.com/tls-int/ca-chain.pem
+#certificateAuthorities:
+#  int.ca.org1.acme.com:
+#    url: http://localhost:7056
+#    caName: int.ca.org1.acme.com
+#    #tlsCACerts:
+#    #  pem:
+#    #    - |
+#    #      ${CAPEM}
+#    httpOptions:
+#      verify: false
+
