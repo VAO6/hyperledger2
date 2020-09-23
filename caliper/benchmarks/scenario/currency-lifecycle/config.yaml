@@ -6,7 +6,7 @@ test:
     number: 5
   rounds:
     - label: mint
-      txNumber: 500
+      txNumber: 100
       rateControl:
         type: fixed-rate
         opts:
@@ -14,11 +14,15 @@ test:
       callback: benchmarks/callbacks/foodcontrol/currency/mint.js
       arguments:
         currencyCode: USD
+        minterOrg: Org1
         minter: Org1MSP
         client: client@org1.acme.com
-        amount: "500"
+        receiverOrg: Org2
         receiver: Org2MSP
         receiverClient: client@org2.acme.com
+        amount: 100
+        depositReference: DEP1234567890
+        depositBank: Bancolombia
     #- label: transfer
     #  txNumber: 500
     #  rateControl:
@@ -26,13 +30,15 @@ test:
     #    opts:
     #      tps: 25
     #  callback: benchmarks/callbacks/foodcontrol/currency/transfer.js
-    - label: redeem
-      txNumber: 500
-      rateControl:
-        type: fixed-rate
-        opts:
-          tps: 25
-      callback: benchmarks/callback/foodcontrol/currency/redeem.js
+    #  arguments:
+    #- label: redeem
+    #  txNumber: 1
+    #  rateControl:
+    #    type: fixed-rate
+    #    opts:
+    #      tps: 25
+    #  callback: benchmarks/callbacks/foodcontrol/currency/redeem.js
+    #  arguments:
 observer:
   type: local
   interval: 1

@@ -27,14 +27,14 @@ const version = "v0.1";
 let bc,
   ctx,
   currencyCode,
-  minter,
   minterIdentity,
-  amount,
   receiver,
-  receiverIdentity,
   clientIdx,
   privateData,
-  targetPeers;
+  amount,
+  targetPeers,
+  receiverIdentity,
+  utxoIDs = [];
 
 /**
  * Initializes the workload module before the start of the round.
@@ -46,16 +46,18 @@ module.exports.init = async (blockchain, context, args) => {
   bc = blockchain;
   ctx = context;
   currencyCode = args.currencyCode;
-  minter = args.minter;
   minterIdentity = args.client;
-  amount = args.amount;
   receiver = args.receiver;
   receiverIdentity = args.receiverClient;
+  amount = args.amount;
   clientIdx = context.clientIdx.toString();
-
   targetPeers = Array.from(
-    ctx.networkInfo.getPeersOfOrganization("Org1")
-  ).concat(Array.from(ctx.networkInfo.getPeersOfOrganization("Org2")));
+    ctx.networkInfo.getPeersOfOrganization(args.minterOrg)
+  ).concat(
+    Array.from(ctx.networkInfo.getPeersOfOrganization(args.receiverOrg))
+  );
+  let minter = args.minter;
+
   // Set the trustline between minter and receiver first
   try {
     console.log(
@@ -73,12 +75,13 @@ module.exports.init = async (blockchain, context, args) => {
       `Client ${clientIdx}: Smart Contract threw with error: ${error}`
     );
   }
+
   // Create the private data required for minting
   privateData = {
     mintPrivateData: Buffer.from(
       JSON.stringify({
-        depositReference: "DEP1234567890",
-        bank: "Bancolombia",
+        depositReference: args.depositReference,
+        bank: args.depositBank,
       })
     ),
   };
@@ -105,6 +108,5 @@ module.exports.run = async () => {
 };
 
 module.exports.end = async () => {
-  // Noop
   logger.debug("Disposed of workload module");
 };
