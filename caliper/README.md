@@ -1,5 +1,7 @@
 # Caliper
 
+En esta carpeta pueden encontrar unas configuraciones y codigo de un benchmark para empezar a trabajar con Caliper.
+
 ## Prerrequisitos
 
 Se requieren las siguientes herramientas para instalar el CLI desde NPM:
@@ -12,7 +14,7 @@ Se requieren las siguientes herramientas para instalar el CLI desde NPM:
 ```sh
 npm init -y
 npm install --only=prod @hyperledger/caliper-cli@0.3.2
-npx caliper bind --caliper-bind-sut fabric:2.1.0 --caliper-bind-sdk 2.1.0 --caliper-fabric-gateway-usegateway --caliper-flow-only-test
+npx caliper bind --caliper-bind-sut fabric:latest-v2 --caliper-bind-sdk latest-v2 --caliper-fabric-gateway-usegateway --caliper-flow-only-test
 ```
 
 ## Lanzar Caliper master

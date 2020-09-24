@@ -106,6 +106,7 @@ peers:
     grpcOptions:
       ssl-target-name-override: peer0.org1.acme.com
       hostnameOverride: peer0.org1.acme.com
+      grpc.keepalive_time_ms: 600000
   peer0.org2.acme.com:
     url: grpcs://localhost:8051
     tlsCACerts:
@@ -113,6 +114,7 @@ peers:
     grpcOptions:
       ssl-target-name-override: peer0.org2.acme.com
       hostnameOverride: peer0.org2.acme.com
+      grpc.keepalive_time_ms: 600000
   peer0.org3.acme.com:
     url: grpcs://localhost:9051
     tlsCACerts:
@@ -120,6 +122,7 @@ peers:
     grpcOptions:
       ssl-target-name-override: peer0.org3.acme.com
       hostnameOverride: peer0.org3.acme.com
+      grpc.keepalive_time_ms: 600000
 orderers:
   orderer.org1.acme.com:
     url: grpcs://localhost:7050

@@ -103,7 +103,7 @@ module.exports.run = async () => {
     "foodmarketplace",
     "v1.0",
     txArgs,
-    30
+    100
   );
 };
 

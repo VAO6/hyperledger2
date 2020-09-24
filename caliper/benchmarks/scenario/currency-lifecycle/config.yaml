@@ -3,7 +3,7 @@ test:
   description: "This benchmark scenario will use currency contract transactions, from minting to transfering to redeeming."
   workers:
     type: local
-    number: 5
+    number: 3
   rounds:
     - label: mint
       txNumber: 100
