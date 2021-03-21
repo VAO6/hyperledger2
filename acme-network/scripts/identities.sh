@@ -47,6 +47,9 @@ issueTLSCertificates tls-int 7057 org1.acme.com client@org1.acme.com clientpw cl
 # issue certificates for peer node identity and for peer server tls
 issueCertificates int 7056 org1.acme.com peer0.org1.acme.com peerpw peer "$CSR_NAMES_ORG1" ""
 issueTLSCertificates tls-int 7057 org1.acme.com peer0.org1.acme.com peerpw peer "$CSR_NAMES_ORG1" "peer0.org1.acme.com,localhost"
+# issue certificates for orderer node identity and for orderer server tls
+issueCertificates int 7056 org1.acme.com orderer.org1.acme.com ordererpw orderer "$CSR_NAMES_ORG1" ""
+issueTLSCertificates tls-int 7057 org1.acme.com orderer.org1.acme.com ordererpw orderer "$CSR_NAMES_ORG1" "orderer.org1.acme.com,localhost"
 
 # Org2
 export CSR_NAMES_ORG2="C=CL,ST=Santiago,L=Santiago,O=Org2,OU=Hyperledger Fabric"
@@ -59,6 +62,9 @@ issueTLSCertificates tls-int 8057 org2.acme.com client@org2.acme.com clientpw cl
 # issue certificates for peer node identity and for peer server tls
 issueCertificates int 8056 org2.acme.com peer0.org2.acme.com peerpw peer "$CSR_NAMES_ORG2" ""
 issueTLSCertificates tls-int 8057 org2.acme.com peer0.org2.acme.com peerpw peer "$CSR_NAMES_ORG2" "peer0.org2.acme.com,localhost"
+# issue certificates for orderer node identity and for orderer server tls
+issueCertificates int 8056 org2.acme.com orderer.org2.acme.com ordererpw orderer "$CSR_NAMES_ORG2" ""
+issueTLSCertificates tls-int 8057 org2.acme.com orderer.org2.acme.com ordererpw orderer "$CSR_NAMES_ORG2" "orderer.org2.acme.com,localhost"
 
 # Org3
 export CSR_NAMES_ORG3="C=MX,ST=Mexico City,L=Mexico City,O=Org3,OU=Hyperledger Fabric"
@@ -71,15 +77,18 @@ issueTLSCertificates tls-int 9057 org3.acme.com client@org3.acme.com clientpw cl
 # issue certificates for peer node identity and for peer server tls
 issueCertificates int 9056 org3.acme.com peer0.org3.acme.com peerpw peer "$CSR_NAMES_ORG3"
 issueTLSCertificates tls-int 9057 org3.acme.com peer0.org3.acme.com peerpw peer "$CSR_NAMES_ORG3" "peer0.org3.acme.com,localhost"
-
-# Acme
-export CSR_NAMES_ACME="C=BE,ST=Flemish Brabant,L=Louvain,O=Acme,OU=Hyperledger Fabric"
-# issue certificates for admin user identity and admin client tls
-issueCertificates int 10056 acme.com admin@acme.com adminpw admin "$CSR_NAMES_ACME" ""
-issueTLSCertificates tls-int 10057 acme.com admin@acme.com adminpw admin "$CSR_NAMES_ACME" "admin@acme.com,localhost"
 # issue certificates for orderer node identity and for orderer server tls
-issueCertificates int 10056 acme.com orderer.acme.com ordererpw orderer "$CSR_NAMES_ACME" ""
-issueTLSCertificates tls-int 10057 acme.com orderer.acme.com ordererpw orderer "$CSR_NAMES_ACME" "orderer.acme.com,localhost"
+issueCertificates int 9056 org3.acme.com orderer.org3.acme.com ordererpw orderer "$CSR_NAMES_ORG3" ""
+issueTLSCertificates tls-int 9057 org3.acme.com orderer.org3.acme.com ordererpw orderer "$CSR_NAMES_ORG3" "orderer.org3.acme.com,localhost"
+
+## Acme
+#export CSR_NAMES_ACME="C=BE,ST=Flemish Brabant,L=Louvain,O=Acme,OU=Hyperledger Fabric"
+## issue certificates for admin user identity and admin client tls
+#issueCertificates int 10056 acme.com admin@acme.com adminpw admin "$CSR_NAMES_ACME" ""
+#issueTLSCertificates tls-int 10057 acme.com admin@acme.com adminpw admin "$CSR_NAMES_ACME" "admin@acme.com,localhost"
+## issue certificates for orderer node identity and for orderer server tls
+#issueCertificates int 10056 acme.com orderer.acme.com ordererpw orderer "$CSR_NAMES_ACME" ""
+#issueTLSCertificates tls-int 10057 acme.com orderer.acme.com ordererpw orderer "$CSR_NAMES_ACME" "orderer.acme.com,localhost"
 
 # User1@org1.acme.com with OU of the departament it belongs to
 # In the Fabric CA Server configurations you can configure these posible OU, good practice is to separate them by channel and role in the channel
