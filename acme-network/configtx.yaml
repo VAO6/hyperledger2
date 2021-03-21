@@ -9,22 +9,22 @@
 ################################################################################
 Organizations:
 
-    #- &OrdererOrg
-    #    Name: OrdererOrg
-    #    ID: OrdererMSP
-    #    MSPDir: fabric-ca/acme.com/msp
-    #    Policies:
-    #        Readers:
-    #            Type: Signature
-    #            Rule: "OR('OrdererMSP.member')"
-    #        Writers:
-    #            Type: Signature
-    #            Rule: "OR('OrdererMSP.member')"
-    #        Admins:
-    #            Type: Signature
-    #            Rule: "OR('OrdererMSP.admin')"
-    #    OrdererEndpoints:
-    #        - orderer.acme.com:7050
+    - &OrdererOrg
+        Name: OrdererOrg
+        ID: OrdererMSP
+        MSPDir: fabric-ca/acme.com/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('OrdererMSP.member')"
+            Writers:
+                Type: Signature
+                Rule: "OR('OrdererMSP.member')"
+            Admins:
+                Type: Signature
+                Rule: "OR('OrdererMSP.admin')"
+        OrdererEndpoints:
+            - orderer.acme.com:7050
 
     - &Org1
         Name: Org1MSP
@@ -33,24 +33,19 @@ Organizations:
         Policies:
             Readers:
                 Type: Signature
-                Rule: "OR('Org1MSP.admin', 'Org1MSP.peer', 'Org1MSP.client', 'Org1MSP.orderer')"
+                Rule: "OR('Org1MSP.admin', 'Org1MSP.peer', 'Org1MSP.client')"
             Writers:
                 Type: Signature
-                Rule: "OR('Org1MSP.admin', 'Org1MSP.client', 'Org1MSP.orderer')"
+                Rule: "OR('Org1MSP.admin', 'Org1MSP.client')"
             Admins:
                 Type: Signature
                 Rule: "OR('Org1MSP.admin')"
-            Orderers:
-                Type: Signature
-                Rule: "OR('Org1MSP.orderer')"
             Endorsement:
                 Type: Signature
                 Rule: "OR('Org1MSP.peer')"
         AnchorPeers:
             - Host: peer0.org1.acme.com
               Port: 7051
-        OrdererEndpoints:
-            - orderer.org1.acme.com:7050
 
     - &Org2
         Name: Org2MSP
@@ -59,24 +54,19 @@ Organizations:
         Policies:
             Readers:
                 Type: Signature
-                Rule: "OR('Org2MSP.admin', 'Org2MSP.peer', 'Org2MSP.client', 'Org2MSP.orderer')"
+                Rule: "OR('Org2MSP.admin', 'Org2MSP.peer', 'Org2MSP.client')"
             Writers:
                 Type: Signature
-                Rule: "OR('Org2MSP.admin', 'Org2MSP.client', 'Org2MSP.orderer')"
+                Rule: "OR('Org2MSP.admin', 'Org2MSP.client')"
             Admins:
                 Type: Signature
                 Rule: "OR('Org2MSP.admin')"
-            Orderers:
-                Type: Signature
-                Rule: "OR('Org2MSP.orderer')"
             Endorsement:
                 Type: Signature
                 Rule: "OR('Org2MSP.peer')"
         AnchorPeers:
             - Host: peer0.org2.acme.com
               Port: 7051
-        OrdererEndpoints:
-            - orderer.org2.acme.com:7050
 
     - &Org3
         Name: Org3MSP
@@ -85,25 +75,19 @@ Organizations:
         Policies:
             Readers:
                 Type: Signature
-                Rule: "OR('Org3MSP.admin', 'Org3MSP.peer', 'Org3MSP.client', 'Org3MSP.orderer')"
+                Rule: "OR('Org3MSP.admin', 'Org3MSP.peer', 'Org3MSP.client')"
             Writers:
                 Type: Signature
-                Rule: "OR('Org3MSP.admin', 'Org3MSP.client', 'Org3MSP.orderer')"
+                Rule: "OR('Org3MSP.admin', 'Org3MSP.client')"
             Admins:
                 Type: Signature
                 Rule: "OR('Org3MSP.admin')"
-            Orderers:
-                Type: Signature
-                Rule: "OR('Org3MSP.orderer')"
             Endorsement:
                 Type: Signature
                 Rule: "OR('Org3MSP.peer')"
         AnchorPeers:
             - Host: peer0.org3.acme.com
               Port: 7051
-        OrdererEndpoints:
-            - orderer.org3.acme.com:7050
-
 ################################################################################
 #   SECTION: Capabilities
 ################################################################################
@@ -141,7 +125,7 @@ Application: &ApplicationDefaults
             Rule: "MAJORITY Admins"
         LifecycleEndorsement:
             Type: ImplicitMeta
-            Rule: "ALL Endorsement"
+            Rule: "MAJORITY Endorsement"
         Endorsement:
             Type: ImplicitMeta
             Rule: "MAJORITY Endorsement"
@@ -158,21 +142,13 @@ Orderer: &OrdererDefaults
 
     EtcdRaft:
         Consenters:
-        - Host: orderer.org1.acme.com
+        - Host: orderer.acme.com
           Port: 7050
-          ClientTLSCert: fabric-ca/org1.acme.com/orderers/orderer.org1.acme.com/tls/server.crt
-          ServerTLSCert: fabric-ca/org1.acme.com/orderers/orderer.org1.acme.com/tls/server.crt
-        - Host: orderer.org2.acme.com
-          Port: 7050
-          ClientTLSCert: fabric-ca/org2.acme.com/orderers/orderer.org2.acme.com/tls/server.crt
-          ServerTLSCert: fabric-ca/org2.acme.com/orderers/orderer.org2.acme.com/tls/server.crt
-        - Host: orderer.org3.acme.com
-          Port: 7050
-          ClientTLSCert: fabric-ca/org3.acme.com/orderers/orderer.org3.acme.com/tls/server.crt
-          ServerTLSCert: fabric-ca/org3.acme.com/orderers/orderer.org3.acme.com/tls/server.crt
+          ClientTLSCert: fabric-ca/acme.com/orderers/orderer.acme.com/tls/server.crt
+          ServerTLSCert: fabric-ca/acme.com/orderers/orderer.acme.com/tls/server.crt
 
     Addresses:
-        #- orderer.acme.com:7050
+        - orderer.acme.com:7050
     BatchTimeout: 2s
     BatchSize:
         MaxMessageCount: 500
@@ -195,7 +171,7 @@ Orderer: &OrdererDefaults
         # from the orderer for the peer to validate it.
         BlockValidation:
             Type: ImplicitMeta
-            Rule: "ANY Orderers"
+            Rule: "ANY Writers"
 
 ################################################################################
 #
@@ -239,10 +215,7 @@ Profiles:
         Orderer:
             <<: *OrdererDefaults
             Organizations:
-                #- *OrdererOrg
-                - *Org1
-                - *Org2
-                - *Org3
+                - *OrdererOrg
             Capabilities:
                 <<: *OrdererCapabilities
         Consortiums:

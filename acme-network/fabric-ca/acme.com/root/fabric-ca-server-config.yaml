@@ -85,7 +85,7 @@ tls:
 #############################################################################
 ca:
   # Name of this CA
-  name: root.ca.org2.acme.com
+  name: root.ca.acme.com
   # Key file (is only used to import a private key into BCCSP)
   keyfile:
   # Certificate file (default: ca-cert.pem)
@@ -304,18 +304,18 @@ signing:
 #     CA certificates though it can still issue end entity certificates.
 ###########################################################################
 csr:
-  cn: root.ca.org2.acme.com
+  cn: root.ca.acme.com
   keyrequest:
     algo: ecdsa
     size: 256
   names:
-    - C: CL
-      ST: Santiago
-      L: Santiago
-      O: Org2
+    - C: BE
+      ST: "Flemish Brabant"
+      L: Louvain
+      O: Acme
       OU: "Hyperledger Fabric"
   hosts:
-    - root.ca.org2.acme.com
+    - root.ca.acme.com
     - localhost
   ca:
     expiry: 131400h
